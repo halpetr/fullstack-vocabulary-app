@@ -56,6 +56,25 @@ let connectionFunctions = {
         if (err) throw err;
       });
     }),
+
+  find: (word) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `select * from Vocabulary where
+                      fi_word REGEXP '^.*${word}.*$'
+                      OR eng_word REGEXP '^.*${word}.*$'
+                      OR sv_word REGEXP '^.*${word}.*$'
+                      OR ru_word REGEXP '^.*${word}.*$'`;
+        connection.query(sql, (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+          connection.release();
+        });
+      });
+    }),
 };
 
 module.exports = connectionFunctions;
