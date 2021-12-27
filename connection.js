@@ -21,6 +21,10 @@ var pool = mysql.createPool(config);
  * Functions used for to get data from database
  */
 let connectionFunctions = {
+  /**
+   * This function is used to access all entries in the Vocabulary table of the database.
+   * @returns {Promise}
+   */
   getAll: () =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
@@ -36,6 +40,11 @@ let connectionFunctions = {
       });
     }),
 
+  /**
+   * This function is used to post an entry in the Vocabulary table of the database.
+   * @param {Object} body - The request body
+   * @returns {Promise}
+   */
   post: (body) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
@@ -57,6 +66,11 @@ let connectionFunctions = {
       });
     }),
 
+  /**
+   * Description
+   * @param {string} word - The word that is searched for in the database.
+   * @returns {Promise}
+   */
   find: (word) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
