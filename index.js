@@ -13,6 +13,7 @@ const vocabulary = require('./routes/vocabulary');
 app.use(express.json());
 app.use(cors());
 app.use('/vocabulary', vocabulary);
+app.use(express.static('frontend/build'));
 
 /**
  * Create a server (app.listen)
