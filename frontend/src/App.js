@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container } from 'react-bootstrap';
+import { Button, Container } from 'react-bootstrap';
 
 const getVocab = async () => {
   try {
@@ -11,10 +11,18 @@ const getVocab = async () => {
   }
 };
 
-const createVocabItemList = (vocabl) => {
-  let arr = vocabl.map((v) => v);
-  console.log(arr);
-  return arr;
+const postNewWord = async (body) => {
+  try {
+    await axios.post('http://localhost:8080/vocabulary', {
+      tags: body.tags,
+      fi_word: body.fi_word,
+      eng_word: body.eng_word,
+      sv_word: body.sv_word,
+      ru_word: body.ru_word,
+    });
+  } catch (error) {
+    return console.log(error);
+  }
 };
 
 function App() {
@@ -31,10 +39,13 @@ function App() {
       {vocab.map((voc, index) => (
         <Container key={index}>
           <ul>
-            <li>{voc.fi_word}</li>
+            <li>
+              {voc.fi_word} - {voc.tags}
+            </li>
           </ul>
         </Container>
       ))}
+      <Button onClick={() => postNewWord()}>ADD</Button>
     </div>
   );
 }
