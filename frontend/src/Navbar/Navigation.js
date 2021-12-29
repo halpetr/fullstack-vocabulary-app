@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function Navigation(props) {
   return (
     <Navbar collapseOnSelect expand="sm" variant="dark" id="navbar">
-      <Container>
+      <Container id="nav-container">
         <Nav.Link as={Link} to="/">
           <Navbar.Brand id="navbrand"> Learn Words! </Navbar.Brand>
         </Nav.Link>
@@ -29,15 +29,6 @@ function Navigation(props) {
               eventKey={2}
             >
               Add words
-            </Nav.Link>
-            <Nav.Link
-              className="mt-2"
-              id="button"
-              as={Link}
-              to="/info"
-              eventKey={3}
-            >
-              Info
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
