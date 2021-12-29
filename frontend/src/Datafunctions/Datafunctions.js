@@ -10,6 +10,17 @@ const Datafunctions = {
     }
   },
 
+  getByLang: async (langs) => {
+    try {
+      let { data } = await axios.get(
+        `http://localhost:8080/vocabulary/langs?langs=${langs}`
+      );
+      return data;
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
   postNewWord: async (body) => {
     try {
       await axios.post('http://localhost:8080/vocabulary', {
