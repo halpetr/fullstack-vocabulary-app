@@ -70,18 +70,15 @@ let connectionFunctions = {
 
   /**
    * Description
-   * @param {string} word - The word that is searched for in the database.
+   * @param {string} tag - The tag that is searched for in the database.
    * @returns {Promise}
    */
-  find: (word) =>
+  find: (tag) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
         var sql = `select * from Vocabulary where
-                      fi_word REGEXP '^.*${word}.*$'
-                      OR eng_word REGEXP '^.*${word}.*$'
-                      OR sv_word REGEXP '^.*${word}.*$'
-                      OR ru_word REGEXP '^.*${word}.*$'`;
+                      tags REGEXP '^.*${tag}.*$'`;
         connection.query(sql, (error, result) => {
           if (error) {
             reject(error);

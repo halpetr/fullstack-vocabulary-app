@@ -29,17 +29,17 @@ router
     }
   });
 
-router.route('/word').get(async (req, res, next) => {
+router.route('/tag').get(async (req, res, next) => {
   try {
-    var word = req.query.word;
-    let data = await connection.find(word);
+    var tag = req.query.tag;
+    let data = await connection.find(tag);
     if (data.length !== 0) {
       res.statusCode = 200;
       res.send(data);
       next();
     } else {
       res.statusCode = 404;
-      res.send({ message: `There is no word like ${word}` });
+      res.send({ message: `There is no word like ${tag}` });
     }
   } catch (error) {
     res.statusCode = 404;
