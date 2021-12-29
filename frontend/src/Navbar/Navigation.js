@@ -25,7 +25,7 @@ function Navigation(props) {
               className="mt-2"
               id="button"
               as={Link}
-              to="/settings"
+              to="/add"
               eventKey={2}
             >
               Add words

@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import Main from './Pages/Main';
 import NotFound from './Pages/NotFound';
 import df from './Datafunctions/Datafunctions';
+import AddWords from './Pages/AddWords';
 
 function App() {
   const [vocab, setVocab] = useState([]);
@@ -21,6 +22,7 @@ function App() {
       <Routes>
         <Route path="*" exact element={<NotFound />} />
         <Route path="/" exact element={<Main vocab={vocab} />} />
+        <Route path="add" exact element={<AddWords />} />
       </Routes>
     </div>
   );
