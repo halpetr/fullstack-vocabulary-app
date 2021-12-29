@@ -29,6 +29,19 @@ router
     }
   });
 
+router.route('/langs').get(async (req, res, next) => {
+  try {
+    var langs = req.query.langs.split('_');
+    console.log(langs);
+    let data = await connection.getSelectedLanguages(langs[0], langs[1]);
+    res.statusCode = 200;
+    res.send(data);
+  } catch (error) {
+    res.statusCode = 400;
+    return console.log(error);
+  }
+});
+
 router.route('/tag').get(async (req, res, next) => {
   try {
     var tag = req.query.tag;

@@ -29,7 +29,7 @@ let connectionFunctions = {
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        var sql = `select * from Vocabulary`;
+        var sql = `select * from Vocabulary;`;
         connection.query(sql, (error, result) => {
           if (error) {
             reject(error);
@@ -37,6 +37,23 @@ let connectionFunctions = {
           resolve(result);
           connection.release();
         });
+      });
+    }),
+
+  getSelectedLanguages: (sourceLang, targetLang) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `SELECT ${sourceLang}_word, ${targetLang}_word FROM Vocabulary;`;
+        console.log(sql);
+        connection.query(sql, (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+        });
+        connection.release();
+        if (err) throw err;
       });
     }),
 
