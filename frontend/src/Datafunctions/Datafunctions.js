@@ -10,7 +10,7 @@ const Datafunctions = {
     }
   },
 
-  getByLang: async (langs) => {
+  getByLangs: async (langs) => {
     try {
       let { data } = await axios.get(
         `http://localhost:8080/vocabulary/langs?langs=${langs}`
