@@ -1,51 +1,27 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Button, Container } from 'react-bootstrap';
-
-const getVocab = async () => {
-  try {
-    let { data } = await axios.get('http://localhost:8080/vocabulary');
-    return data;
-  } catch (error) {
-    return console.log(error);
-  }
-};
-
-const postNewWord = async (body) => {
-  try {
-    await axios.post('http://localhost:8080/vocabulary', {
-      tags: body.tags,
-      fi_word: body.fi_word,
-      eng_word: body.eng_word,
-      sv_word: body.sv_word,
-      ru_word: body.ru_word,
-    });
-  } catch (error) {
-    return console.log(error);
-  }
-};
+import Navigation from './Navbar/Navigation';
+import { Route, Routes } from 'react-router-dom';
+import Main from './Pages/Main';
+import NotFound from './Pages/NotFound';
+import df from './Datafunctions/Datafunctions';
 
 function App() {
   const [vocab, setVocab] = useState([]);
+  const [body, setBody] = useState({});
 
   useEffect(() => {
-    getVocab()
+    df.getVocab()
       .then((res) => setVocab(res))
       .catch((err) => console.log(err));
   }, []);
 
   return (
     <div className="App">
-      {vocab.map((voc, index) => (
-        <Container key={index}>
-          <ul>
-            <li>
-              {voc.fi_word} - {voc.tags}
-            </li>
-          </ul>
-        </Container>
-      ))}
-      <Button onClick={() => postNewWord()}>ADD</Button>
+      <Navigation />
+      <Routes>
+        <Route path="*" exact element={<NotFound />} />
+        <Route path="/" exact element={<Main vocab={vocab} />} />
+      </Routes>
     </div>
   );
 }
