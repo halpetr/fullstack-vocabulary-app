@@ -45,7 +45,7 @@ router.route('/langs').get(async (req, res, next) => {
 router.route('/tag').get(async (req, res, next) => {
   try {
     var tag = req.query.tag;
-    let data = await connection.find(tag);
+    let data = await connection.findByTag(tag);
     if (data.length !== 0) {
       res.statusCode = 200;
       res.send(data);
@@ -57,6 +57,16 @@ router.route('/tag').get(async (req, res, next) => {
   } catch (error) {
     res.statusCode = 404;
     res.send(error);
+  }
+});
+
+router.route('/cols').get(async (req, res, next) => {
+  try {
+    let data = await connection.getDatabaseColumns();
+    res.statusCode = 200;
+    res.send(data);
+  } catch (error) {
+    return console.log(error);
   }
 });
 

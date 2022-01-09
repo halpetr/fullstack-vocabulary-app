@@ -10,7 +10,7 @@ const Datafunctions = {
     }
   },
 
-  getByLangs: async (langs) => {
+  getSelectedLanguages: async (langs) => {
     try {
       let { data } = await axios.get(
         `http://localhost:8080/vocabulary/langs?langs=${langs}`
@@ -30,6 +30,14 @@ const Datafunctions = {
         sv_word: body.sv_word,
         ru_word: body.ru_word,
       });
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
+  getDatabaseColumns: async () => {
+    try {
+      return await axios.get('http://localhost:8080/vocabulary/cols');
     } catch (error) {
       return console.log(error);
     }
