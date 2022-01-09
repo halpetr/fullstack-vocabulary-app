@@ -50,7 +50,7 @@ let connectionFunctions = {
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        var sql = `SELECT ${sourceLang}_word, ${targetLang}_word FROM Vocabulary;`;
+        var sql = `SELECT ${sourceLang}, ${targetLang} FROM Vocabulary;`;
         console.log(sql);
         connection.query(sql, (error, result) => {
           if (error) {
@@ -64,7 +64,7 @@ let connectionFunctions = {
     }),
 
   /**
-   * This function is used to post an entry in the Vocabulary table of the database.
+   * This function is used to post an entry in the Vocabulary database.
    * @param {Object} body - The request body
    * @returns {Promise}
    */
@@ -72,12 +72,12 @@ let connectionFunctions = {
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        var sql = `INSERT INTO Vocabulary (tags, fi_word, eng_word, sv_word, ru_word) values (${connection.escape(
+        var sql = `INSERT INTO Vocabulary (tags, English, Finnish, Swedish, Russian) values (${connection.escape(
           body.tags
-        )},${connection.escape(body.fi_word)}, ${connection.escape(
-          body.eng_word
-        )}, ${connection.escape(body.sv_word)}, ${connection.escape(
-          body.ru_word
+        )},${connection.escape(body.English)}, ${connection.escape(
+          body.Finnish
+        )}, ${connection.escape(body.Swedish)}, ${connection.escape(
+          body.Russian
         )});`;
         console.log(sql);
         connection.query(sql, (error) => {

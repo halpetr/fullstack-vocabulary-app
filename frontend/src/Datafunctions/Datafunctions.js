@@ -25,10 +25,10 @@ const Datafunctions = {
     try {
       await axios.post('http://localhost:8080/vocabulary', {
         tags: body.tags,
-        fi_word: body.fi_word,
-        eng_word: body.eng_word,
-        sv_word: body.sv_word,
-        ru_word: body.ru_word,
+        English: body.English,
+        Finnish: body.Finnish,
+        Swedish: body.Swedish,
+        Russian: body.Russian,
       });
     } catch (error) {
       return console.log(error);
