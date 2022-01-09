@@ -40,6 +40,12 @@ let connectionFunctions = {
       });
     }),
 
+  /**
+   * Description
+   * @param {any} sourceLang
+   * @param {any} targetLang
+   * @returns {any}
+   */
   getSelectedLanguages: (sourceLang, targetLang) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
@@ -72,7 +78,7 @@ let connectionFunctions = {
           body.eng_word
         )}, ${connection.escape(body.sv_word)}, ${connection.escape(
           body.ru_word
-        )})`;
+        )});`;
         console.log(sql);
         connection.query(sql, (error) => {
           if (error) {
@@ -90,19 +96,38 @@ let connectionFunctions = {
    * @param {string} tag - The tag that is searched for in the database.
    * @returns {Promise}
    */
-  find: (tag) =>
+  findByTag: (tag) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
         var sql = `select * from Vocabulary where
-                      tags REGEXP '^.*${tag}.*$'`;
+                      tags REGEXP '^.*${tag}.*$';`;
         connection.query(sql, (error, result) => {
           if (error) {
             reject(error);
           }
           resolve(result);
           connection.release();
+          if (err) throw err;
         });
+      });
+    }),
+
+  getDatabaseColumns: () =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+          "select column_name from information_schema.columns where table_name='Vocabulary';",
+          (error, result) => {
+            if (error) {
+              reject(error);
+            }
+            resolve(result);
+            connection.release();
+            if (err) throw err;
+          }
+        );
       });
     }),
 };
