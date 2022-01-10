@@ -13,7 +13,10 @@ function DropMenu(props) {
   const getLanguages = () => {
     let n = [];
     databaseCols.forEach((col) => {
-      if (col['column_name'].includes('word')) {
+      if (
+        col['column_name'].includes('ish') ||
+        col['column_name'].includes('ian')
+      ) {
         let m = col['column_name'].split('_');
         n.push(m[0]);
         setLangs(n);
@@ -36,10 +39,10 @@ function DropMenu(props) {
     console.log(ls);
     if (ls.length !== langs.length) {
       setIsLangSelected(true);
-      props.setIsSelected(true);
       props.selectLanguages(activeLang1, language);
     }
     setUnused(ls);
+    setIsLangSelected(false);
     setActiveLang2(language);
   };
 
@@ -53,8 +56,9 @@ function DropMenu(props) {
   }, [databaseCols]);
 
   return (
-    <Row>
+    <Row id="dropmenu">
       <Col>
+        <h6>Select a language you know:</h6>
         <Dropdown onClick={() => getLanguages()}>
           <Dropdown.Toggle variant="dark">{activeLang1}</Dropdown.Toggle>
           <Dropdown.Menu variant="dark">
@@ -74,9 +78,9 @@ function DropMenu(props) {
                 return (
                   <Dropdown.Item
                     key={index}
-                    onClick={() => handleClickLeft(langs[lang])}
+                    onClick={() => handleClickLeft(unUsed[lang])}
                   >
-                    {langs[lang]}
+                    {unUsed[lang]}
                   </Dropdown.Item>
                 );
               })}
@@ -84,6 +88,7 @@ function DropMenu(props) {
         </Dropdown>
       </Col>
       <Col>
+        <h6>Select language you want to learn:</h6>
         <Dropdown onClick={() => getLanguages()}>
           <Dropdown.Toggle disabled={!isLangSelected} variant="dark">
             {activeLang2}
@@ -105,9 +110,9 @@ function DropMenu(props) {
                 return (
                   <Dropdown.Item
                     key={index}
-                    onClick={() => handleClickRight(langs[lang])}
+                    onClick={() => handleClickRight(unUsed[lang])}
                   >
-                    {langs[lang]}
+                    {unUsed[lang]}
                   </Dropdown.Item>
                 );
               })}
