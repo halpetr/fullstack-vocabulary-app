@@ -1,9 +1,10 @@
 import React from 'react';
+import MyForm from '../Components/MyForm';
 
 function AddWords() {
   return (
     <div id="add">
-      <h1>A FORM FOR ADDING WORDS!</h1>
+      <MyForm />
     </div>
   );
 }
