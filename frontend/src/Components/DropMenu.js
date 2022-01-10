@@ -43,6 +43,8 @@ function DropMenu(props) {
     }
     setUnused(ls);
     setIsLangSelected(false);
+    props.setSelected(true);
+    props.setResetTable(true);
     setActiveLang2(language);
   };
 
