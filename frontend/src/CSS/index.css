@@ -70,6 +70,18 @@ body {
 }
 
 /* MYTABLE */
+#check-btn {
+  text-align: right;
+}
+
 #check {
   color: green;
+  margin-left: 5px;
+  margin-top: 10px;
+}
+
+#cross {
+  color: red;
+  margin-left: 5px;
+  margin-top: 10px;
 }
