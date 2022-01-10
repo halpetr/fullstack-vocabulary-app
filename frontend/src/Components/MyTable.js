@@ -113,7 +113,7 @@ function MyTable(props) {
         </tbody>
       </Table>
       <div id="check-btn">
-        <Button variant="success" onClick={() => setCheckAnswers(true)}>
+        <Button variant="dark" onClick={() => setCheckAnswers(true)}>
           CHECK
         </Button>
       </div>
