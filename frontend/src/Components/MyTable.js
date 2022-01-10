@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, FormControl, InputGroup, Table } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  FormControl,
+  InputGroup,
+  Row,
+  Table,
+} from 'react-bootstrap';
 import { ImCheckmark, ImCross } from 'react-icons/im';
 
 function MyTable(props) {
@@ -8,6 +15,8 @@ function MyTable(props) {
   const [checkAnswers, setCheckAnswers] = useState(false);
   const [checkArray, setCheckArray] = useState([]);
   const [selectedWords, setSelectedWords] = useState([]);
+  const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
+  const [currentValueArray, setCurrentValueArray] = useState([]);
   console.log(props.langs);
   console.log(checkArray);
 
@@ -25,14 +34,29 @@ function MyTable(props) {
       for (const i of array) {
         arr.push(false);
       }
+      // Set array for text values:
+      let a = [];
+      for (const i of array) {
+        a.push('');
+      }
+      setCurrentValueArray(a);
       console.log(arr, props.selectedLangWords.length);
       return arr;
     };
     setCheckArray(initializeArrayForChecking(props.selectedLangWords));
-  }, [props.selectedLangWords]);
+    if (props.resetTable === true) {
+      setCheckAnswers(false);
+      props.setResetTable(false);
+    }
+  }, [props.selectedLangWords, props.resetTable, props]);
 
   const handleChange = (e, word, index) => {
     e.preventDefault();
+    console.log(e.target.value.toLowerCase());
+    let w = Array.from(currentValueArray);
+    w[index] = e.target.value;
+    setCurrentValueArray(w);
+    console.log(w);
     if (word[language2].toLowerCase() === e.target.value.toLowerCase()) {
       setToCorrect(index);
     } else {
@@ -62,6 +86,25 @@ function MyTable(props) {
     setCheckArray(arr);
   };
 
+  const amountOfRight = () => {
+    let right = 0;
+    for (const i of checkArray) {
+      if (i === true) {
+        right++;
+      }
+    }
+    return right;
+  };
+
+  const handleCheck = () => {
+    setRightAnswersAmount(amountOfRight);
+    setCheckAnswers(true);
+  };
+
+  const handleReset = () => {
+    props.setResetTable(true);
+  };
+
   return (
     <div id="mytable">
       <Table striped bordered hover>
@@ -80,6 +123,7 @@ function MyTable(props) {
                 <InputGroup>
                   <FormControl
                     type="text"
+                    value={currentValueArray[index]}
                     onChange={(e) => handleChange(e, word, index)}
                   />
                   {checkAnswers && (
@@ -112,11 +156,27 @@ function MyTable(props) {
           ))}
         </tbody>
       </Table>
-      <div id="check-btn">
-        <Button variant="dark" onClick={() => setCheckAnswers(true)}>
-          CHECK
-        </Button>
-      </div>
+      {props.selected && (
+        <Row id="check-row">
+          <Col>
+            {checkAnswers && (
+              <>
+                <h6>
+                  Result: {rightAnswersAmount} / {checkArray.length}{' '}
+                </h6>
+                <Button variant="success" onClick={() => handleReset()}>
+                  Try again
+                </Button>
+              </>
+            )}
+          </Col>
+          <Col xs={2}>
+            <Button variant="success" onClick={() => handleCheck()}>
+              CHECK
+            </Button>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 }
