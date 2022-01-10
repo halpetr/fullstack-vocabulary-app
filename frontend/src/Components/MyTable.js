@@ -158,20 +158,22 @@ function MyTable(props) {
       </Table>
       {props.selected && (
         <Row id="check-row">
-          <Col>
-            {checkAnswers && (
-              <>
+          {checkAnswers && (
+            <>
+              <Col id="result">
                 <h6>
                   Result: {rightAnswersAmount} / {checkArray.length}{' '}
                 </h6>
-                <Button variant="success" onClick={() => handleReset()}>
+              </Col>
+              <Col xs={3}>
+                <Button size="sm" variant="dark" onClick={() => handleReset()}>
                   Try again
                 </Button>
-              </>
-            )}
-          </Col>
-          <Col xs={2}>
-            <Button variant="dark" onClick={() => handleCheck()}>
+              </Col>
+            </>
+          )}
+          <Col>
+            <Button size="sm" variant="success" onClick={() => handleCheck()}>
               CHECK
             </Button>
           </Col>
