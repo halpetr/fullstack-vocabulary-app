@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { FormControl, InputGroup, Table } from 'react-bootstrap';
-import { ImCheckmark } from 'react-icons/im';
+import { Button, FormControl, InputGroup, Table } from 'react-bootstrap';
+import { ImCheckmark, ImCross } from 'react-icons/im';
 
 function MyTable(props) {
   const [language1, setLanguage1] = useState([]);
   const [language2, setLanguage2] = useState([]);
-  const [checkAnswers, setCheckAnswers] = useState(true);
+  const [checkAnswers, setCheckAnswers] = useState(false);
   const [checkArray, setCheckArray] = useState([]);
   const [selectedWords, setSelectedWords] = useState([]);
   console.log(props.langs);
+  console.log(checkArray);
 
   useEffect(() => {
     let la = props.langs.split('_');
@@ -18,15 +19,51 @@ function MyTable(props) {
     setSelectedWords(props.selectedLangWords);
   }, [props.langs, props.selectedLangWords]);
 
-  const handleChange = (e, word) => {
+  useEffect(() => {
+    const initializeArrayForChecking = (array) => {
+      let arr = [];
+      for (const i of array) {
+        arr.push(false);
+      }
+      console.log(arr, props.selectedLangWords.length);
+      return arr;
+    };
+    setCheckArray(initializeArrayForChecking(props.selectedLangWords));
+  }, [props.selectedLangWords]);
+
+  const handleChange = (e, word, index) => {
     e.preventDefault();
     if (word[language2].toLowerCase() === e.target.value.toLowerCase()) {
-      console.log(true);
+      setToCorrect(index);
+    } else {
+      setToWrong(index);
     }
   };
 
+  const setToCorrect = (index) => {
+    let arr = Array.from(checkArray);
+    for (const [i, v] of arr.entries()) {
+      if (i === index) {
+        arr[i] = true;
+      }
+    }
+    console.log('arr', arr);
+    setCheckArray(arr);
+  };
+
+  const setToWrong = (index) => {
+    let arr = Array.from(checkArray);
+    for (const [i, v] of arr.entries()) {
+      if (i === index) {
+        arr[i] = false;
+      }
+    }
+    console.log('arr', arr);
+    setCheckArray(arr);
+  };
+
   return (
-    <div>
+    <div id="mytable">
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -43,10 +80,31 @@ function MyTable(props) {
                 <InputGroup>
                   <FormControl
                     type="text"
-                    onChange={(e) => handleChange(e, word)}
+                    onChange={(e) => handleChange(e, word, index)}
                   />
                   {checkAnswers && (
-                    <ImCheckmark className="mt-2 mx-1" id="check" />
+                    <>
+                      {checkArray[index] && (
+                        <ImCheckmark
+                          style={{
+                            visibility: checkArray[index]
+                              ? 'visible'
+                              : 'hidden',
+                          }}
+                          id="check"
+                        />
+                      )}
+                      {!checkArray[index] && (
+                        <ImCross
+                          style={{
+                            visibility: !checkArray[index]
+                              ? 'visible'
+                              : 'hidden',
+                          }}
+                          id="cross"
+                        />
+                      )}
+                    </>
                   )}
                 </InputGroup>{' '}
               </td>
@@ -54,6 +112,11 @@ function MyTable(props) {
           ))}
         </tbody>
       </Table>
+      <div id="check-btn">
+        <Button variant="success" onClick={() => setCheckAnswers(true)}>
+          CHECK
+        </Button>
+      </div>
     </div>
   );
 }
