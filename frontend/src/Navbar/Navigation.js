@@ -11,7 +11,7 @@ function Navigation(props) {
         </Nav.Link>
         <Navbar.Toggle aria-controls="basic-navbar" />
         <Navbar.Collapse id="basic-navbar">
-          <Nav className="col justify-content-around" variant="pills" id="nav">
+          <Nav variant="pills" id="nav">
             <Nav.Link
               className="mt-2"
               id="button"
@@ -19,14 +19,23 @@ function Navigation(props) {
               to="/"
               eventKey={1}
             >
-              Main
+              Type a word
+            </Nav.Link>
+            <Nav.Link
+              className="mt-2"
+              id="button"
+              as={Link}
+              to="/select"
+              eventKey={2}
+            >
+              Select a word
             </Nav.Link>
             <Nav.Link
               className="mt-2"
               id="button"
               as={Link}
               to="/add"
-              eventKey={2}
+              eventKey={3}
             >
               Add words
             </Nav.Link>
