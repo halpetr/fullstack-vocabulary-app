@@ -62,7 +62,9 @@ function DropMenu(props) {
       <Col>
         <h6>Select a language you know:</h6>
         <Dropdown onClick={() => getLanguages()}>
-          <Dropdown.Toggle variant="dark">{activeLang1}</Dropdown.Toggle>
+          <Dropdown.Toggle id="toggle" variant="info">
+            {activeLang1}
+          </Dropdown.Toggle>
           <Dropdown.Menu variant="dark">
             {!isLangSelected &&
               langs.map((index, lang) => {
@@ -92,7 +94,11 @@ function DropMenu(props) {
       <Col>
         <h6>Select language you want to learn:</h6>
         <Dropdown onClick={() => getLanguages()}>
-          <Dropdown.Toggle disabled={!isLangSelected} variant="dark">
+          <Dropdown.Toggle
+            id="toggle"
+            disabled={!isLangSelected}
+            variant="info"
+          >
             {activeLang2}
           </Dropdown.Toggle>
           <Dropdown.Menu variant="dark">
