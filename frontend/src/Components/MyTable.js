@@ -171,7 +171,7 @@ function MyTable(props) {
             )}
           </Col>
           <Col xs={2}>
-            <Button variant="success" onClick={() => handleCheck()}>
+            <Button variant="dark" onClick={() => handleCheck()}>
               CHECK
             </Button>
           </Col>
