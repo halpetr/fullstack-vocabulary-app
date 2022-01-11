@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Nav, Button, Navbar, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { BiCog } from 'react-icons/bi';
 
 function Navigation(props) {
   return (
@@ -37,7 +38,7 @@ function Navigation(props) {
               to="/add"
               eventKey={3}
             >
-              Add words
+              <BiCog style={{ fontSize: '150%' }} />
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
