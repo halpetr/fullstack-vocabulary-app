@@ -1,21 +1,31 @@
 import axios from 'axios';
 
 const Datafunctions = {
-  getVocab: async () => {
-    try {
-      let { data } = await axios.get('http://localhost:8080/vocabulary');
-      return data;
-    } catch (error) {
-      return console.log(error);
-    }
-  },
-
   getSelectedLanguages: async (langs) => {
     try {
       let { data } = await axios.get(
         `http://localhost:8080/vocabulary/langs?langs=${langs}`
       );
       return data;
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
+  getByTag: async (tag) => {
+    try {
+      let { data } = await axios.get(
+        `http://localhost:8080/vocabulary/tag?tag=${tag}`
+      );
+      return data;
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
+  deleteById: async (id) => {
+    try {
+      await axios.delete(`http://localhost:8080/vocabulary/id?id=${id}`);
     } catch (error) {
       return console.log(error);
     }
@@ -38,6 +48,18 @@ const Datafunctions = {
   getDatabaseColumns: async () => {
     try {
       return await axios.get('http://localhost:8080/vocabulary/cols');
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
+  modifyEntry: async (id, column, value) => {
+    try {
+      await axios.patch('http://localhost:8080/vocabulary/mod', {
+        id: id,
+        column: column,
+        value: value,
+      });
     } catch (error) {
       return console.log(error);
     }

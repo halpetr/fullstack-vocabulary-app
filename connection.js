@@ -50,8 +50,7 @@ let connectionFunctions = {
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        var sql = `SELECT ${sourceLang}, ${targetLang} FROM Vocabulary;`;
-        console.log(sql);
+        var sql = `SELECT id, ${sourceLang}, ${targetLang} FROM Vocabulary;`;
         connection.query(sql, (error, result) => {
           if (error) {
             reject(error);
@@ -79,7 +78,6 @@ let connectionFunctions = {
         )}, ${connection.escape(body.Swedish)}, ${connection.escape(
           body.Russian
         )});`;
-        console.log(sql);
         connection.query(sql, (error) => {
           if (error) {
             reject(error);
@@ -128,6 +126,38 @@ let connectionFunctions = {
             if (err) throw err;
           }
         );
+      });
+    }),
+
+  deleteById: (id) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `DELETE FROM Vocabulary WHERE id = ${connection.escape(id)};`;
+        connection.query(sql, (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve({ msg: 'Deleted successfully!' });
+          connection.release();
+          if (err) throw err;
+        });
+      });
+    }),
+
+  modifyEntry: (body) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `UPDATE Vocabulary SET ${body.column} = ${connection.escape(
+          body.value
+        )} WHERE id = ${connection.escape(body.id)};`;
+        connection.query(sql, (error, result) => {
+          if (error) reject(error);
+          resolve({ msg: 'Modified successfully!' });
+          connection.release();
+          if (err) throw err;
+        });
       });
     }),
 };
