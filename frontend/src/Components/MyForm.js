@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-function MyForm() {
+function MyForm(props) {
   return (
     <Form id="form">
       <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
+        <Form.Label>{props.buttonPressed}</Form.Label>
         <Form.Control type="text" placeholder="intial" />
         <Form.Text className="text-muted">
           We'll never share your email with anyone else.
