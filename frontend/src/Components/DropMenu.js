@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Dropdown, Row } from 'react-bootstrap';
-import df from '../Datafunctions/Datafunctions';
 
 function DropMenu(props) {
   const [activeLang1, setActiveLang1] = useState('');
   const [activeLang2, setActiveLang2] = useState('');
   const [langs, setLangs] = useState([]);
-  const [databaseCols, setDatabaseCols] = useState([]);
   const [unUsed, setUnused] = useState([]);
   const [isLangSelected, setIsLangSelected] = useState(false);
 
+  useEffect(() => {
+    setActiveLang1('Select language');
+    setActiveLang2('Select language');
+  }, []);
+
   const getLanguages = () => {
     let n = [];
-    databaseCols.forEach((col) => {
+    props.columns.forEach((col) => {
       if (
         col['column_name'].includes('ish') ||
         col['column_name'].includes('ian')
       ) {
         let m = col['column_name'].split('_');
         n.push(m[0]);
-        setLangs(n);
       }
     });
+    setLangs(n);
   };
 
   const handleClickLeft = (language) => {
@@ -47,15 +50,6 @@ function DropMenu(props) {
     props.setResetTable(true);
     setActiveLang2(language);
   };
-
-  useEffect(() => {
-    setActiveLang1('Select language');
-    setActiveLang2('Select language');
-  }, []);
-
-  useEffect(() => {
-    df.getDatabaseColumns().then((res) => setDatabaseCols(res.data));
-  }, [databaseCols]);
 
   return (
     <Row id="dropmenu">
