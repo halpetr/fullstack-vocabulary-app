@@ -111,6 +111,23 @@ let connectionFunctions = {
       });
     }),
 
+  getBySearch: async (lang, srch) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `SELECT id, ${lang} FROM Vocabulary WHERE ${lang} REGEXP '^.*${srch}.*$';`;
+        console.log(sql);
+        connection.query(sql, (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+          connection.release();
+          if (err) throw err;
+        });
+      });
+    }),
+
   getByLangTag: async (langtag) =>
     new Promise((resolve, reject) => {
       let data = langtag.split('_');

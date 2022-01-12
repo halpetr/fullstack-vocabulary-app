@@ -1,5 +1,4 @@
 const express = require('express');
-const { route } = require('express/lib/router');
 
 var router = express.Router();
 
@@ -34,6 +33,19 @@ router.route('/langs').get(async (req, res, next) => {
     var langs = req.query.langs.split('_');
     console.log(langs);
     let data = await connection.getSelectedLanguages(langs[0], langs[1]);
+    res.statusCode = 200;
+    res.send(data);
+  } catch (error) {
+    res.statusCode = 404;
+    res.send(error);
+  }
+});
+
+router.route('/srch').get(async (req, res, next) => {
+  try {
+    var x = req.query.srch.split('_');
+    console.log(x);
+    let data = await connection.getBySearch(x[0], x[1]);
     res.statusCode = 200;
     res.send(data);
   } catch (error) {

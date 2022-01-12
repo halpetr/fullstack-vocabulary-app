@@ -23,6 +23,18 @@ const Datafunctions = {
     }
   },
 
+  getBySearch: async (lang, srch) => {
+    try {
+      let search = `${lang}_${srch}`;
+      let { data } = await axios.get(
+        `http://localhost:8080/vocabulary/srch?srch=${search}`
+      );
+      return data;
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
   getByLangTag: async (lang, tag) => {
     try {
       let langtag = `${lang}_${tag}`;
