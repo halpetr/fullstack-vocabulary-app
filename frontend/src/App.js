@@ -44,7 +44,7 @@ function App() {
           }
         />
         <Route path="/select" exact element={<Main />} />
-        <Route path="add" exact element={<AddWords />} />
+        <Route path="add" exact element={<AddWords columns={databaseCols} />} />
       </Routes>
     </div>
   );
