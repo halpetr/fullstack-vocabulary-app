@@ -44,7 +44,12 @@ function MyForm(props) {
   // If props.isDel is true, then return this form
   if (props.isDel) {
     return (
-      <DelForm getLanguages={getLanguages} langs={langs} dbTags={dbTags} />
+      <DelForm
+        getLanguages={getLanguages}
+        langs={langs}
+        dbTags={dbTags}
+        handleClose={handleClose}
+      />
     );
   }
 
