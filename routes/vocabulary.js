@@ -54,6 +54,19 @@ router.route('/srch').get(async (req, res, next) => {
   }
 });
 
+router.route('/randnotag').get(async (req, res, next) => {
+  try {
+    var lang = req.query.randnotag;
+    console.log(lang);
+    let data = await connection.getRandomWords(lang);
+    res.statusCode = 200;
+    res.send(data);
+  } catch (error) {
+    res.send(error);
+    res.statusCode = 400;
+  }
+});
+
 router.route('/tag').get(async (req, res, next) => {
   try {
     var tag = req.query.tag;

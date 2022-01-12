@@ -128,6 +128,21 @@ let connectionFunctions = {
       });
     }),
 
+  getRandomWords: (lang) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `SELECT ${lang} FROM Vocabulary ORDER BY RAND() LIMIT 10;`;
+        connection.query(sql, (error, res) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(res);
+          connection.release();
+        });
+      });
+    }),
+
   getByLangTag: async (langtag) =>
     new Promise((resolve, reject) => {
       let data = langtag.split('_');
