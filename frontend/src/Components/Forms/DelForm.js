@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Nav, Row, Col, Dropdown } from 'react-bootstrap';
+import { Form, Button, Nav, Row, Col, Dropdown, Table } from 'react-bootstrap';
+import df from '../../Datafunctions/Datafunctions';
 
 function DelForm(props) {
   const [activeLang, setActiveLang] = useState('');
-  const [activeTag, setActiveTag] = useState('');
+  const [activeSearch, setActiveSearch] = useState('');
   const [isLangSelected, setIsLangSelected] = useState(false);
   const [isTagSelected, setIsTagSelected] = useState(false);
   const [unUsedLangs, setUnusedLangs] = useState([]);
-  const [unUsedTags, setUnusedTags] = useState([]);
-  console.log(props.dbTags);
+  const [langTags, setLangTags] = useState([]);
+  const [showTable, setShowTable] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  console.log(langTags);
 
   useEffect(() => {
     setActiveLang('Select language');
-    setActiveTag('Select tag');
   }, []);
 
   const handleLangSelect = (language) => {
@@ -24,111 +26,99 @@ function DelForm(props) {
     setActiveLang(language);
   };
 
-  const handleTagSelect = (tag) => {
-    let ts = props.langs.filter((t) => tag !== t);
-    if (ts.length !== props.langs.length) {
-      setIsTagSelected(true);
-    }
-    setUnusedTags(ts);
-    setActiveTag(tag);
+  const handleSearch = () => {
+    df.getBySearch(activeLang, activeSearch).then((res) => setLangTags(res));
+    setShowTable(true);
   };
 
-  const handleSelections = () => {};
+  const handleSearchChange = (event) => {
+    event.preventDefault();
+    setActiveSearch(event.target.value);
+  };
 
   return (
     <Form id="form">
       <Form.Label>
-        <h4>
-          Delete by selecting a language and tag or just search for a word:
-        </h4>
+        <h4>Delete by selecting a language and searching for a word:</h4>
       </Form.Label>
-      <Row id="delRow">
-        <Col>
-          <Dropdown onClick={() => props.getLanguages()}>
-            <Dropdown.Toggle className="mb-2" variant="danger">
-              {activeLang}
-            </Dropdown.Toggle>
-            <Dropdown.Menu variant="dark">
-              {!isLangSelected &&
-                props.langs.map((index, lang) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      onClick={() => handleLangSelect(props.langs[lang])}
-                    >
-                      {props.langs[lang]}
-                    </Dropdown.Item>
-                  );
-                })}
-              {isLangSelected &&
-                unUsedLangs.map((index, lang) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      onClick={() => handleLangSelect(unUsedLangs[lang])}
-                    >
-                      {unUsedLangs[lang]}
-                    </Dropdown.Item>
-                  );
-                })}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Col>
-        <Col>
-          <Dropdown>
-            <Dropdown.Toggle className="mb-2" variant="danger">
-              {activeTag}
-            </Dropdown.Toggle>
-            <Dropdown.Menu variant="dark">
-              {!isTagSelected &&
-                props.dbTags.map((tag, index) => {
-                  console.log(tag.tags);
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      onClick={() => handleTagSelect(tag.tags)}
-                    >
-                      {tag.tags}
-                    </Dropdown.Item>
-                  );
-                })}
-              {isTagSelected &&
-                unUsedTags.map((tag, index) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      onClick={() => handleTagSelect(tag.tags)}
-                    >
-                      {tag.tags}
-                    </Dropdown.Item>
-                  );
-                })}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Col>
-        <Col>
-          <Button>Select</Button>
-        </Col>
-      </Row>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Control type="text" placeholder="intial" />
-        <Form.Text className="text-muted">
-          We'll never share your email with anyone else.
-        </Form.Text>
+      <Dropdown id="dropdown" onClick={() => props.getLanguages()}>
+        <Dropdown.Toggle className="mb-2" variant="danger">
+          {activeLang}
+        </Dropdown.Toggle>
+        <Dropdown.Menu variant="dark">
+          {!isLangSelected &&
+            props.langs.map((index, lang) => {
+              return (
+                <Dropdown.Item
+                  key={index}
+                  onClick={() => handleLangSelect(props.langs[lang])}
+                >
+                  {props.langs[lang]}
+                </Dropdown.Item>
+              );
+            })}
+          {isLangSelected &&
+            unUsedLangs.map((index, lang) => {
+              return (
+                <Dropdown.Item
+                  key={index}
+                  onClick={() => handleLangSelect(unUsedLangs[lang])}
+                >
+                  {unUsedLangs[lang]}
+                </Dropdown.Item>
+              );
+            })}
+        </Dropdown.Menu>
+      </Dropdown>
+      {showTable && (
+        <Table
+          striped
+          bordered
+          hover
+          style={{ maxWidth: '50vw', marginRight: 'auto', marginLeft: 'auto' }}
+        >
+          <thead>
+            <tr style={{ textAlign: 'center' }}>
+              <th>{activeLang}</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {langTags.map((lt, index) => (
+              <tr key={index}>
+                <td>{lt[activeLang]}</td>
+                <td style={{ textAlign: 'center' }}>
+                  <Button variant="danger">X</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+      <Form.Group className="mb-3" controlId="search">
+        <Form.Control
+          value={activeSearch}
+          onChange={(e) => handleSearchChange(e)}
+          type="text"
+          placeholder="search"
+        />
       </Form.Group>
-      <Button variant="danger">Search</Button>
 
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group>
       <Row>
-        <Col>
-          <Button variant="danger">Delete</Button>
-        </Col>
+        {isLangSelected && (
+          <Col>
+            <Button variant="danger" onClick={() => handleSearch()}>
+              Search
+            </Button>
+          </Col>
+        )}
+        {showDelete && (
+          <Col>
+            <Button variant="danger">Delete</Button>
+          </Col>
+        )}
+      </Row>
+      <Row className="mt-2">
         <Col>
           <Button onClick={() => props.handleClose()} variant="primary">
             Go back
