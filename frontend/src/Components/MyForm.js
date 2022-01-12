@@ -1,52 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Nav, Row, Col } from 'react-bootstrap';
+import { Form, Button, Nav, Row, Col, Dropdown } from 'react-bootstrap';
 import df from '../Datafunctions/Datafunctions';
-import { useHistory } from 'react-router-dom';
+import Add from './Forms/AddForm';
 
 function MyForm(props) {
-  const [eng, setEng] = useState('');
-  const [fi, setFi] = useState('');
-  const [swe, setSwe] = useState('');
-  const [ru, setRu] = useState('');
-  const [tags, setTags] = useState('');
-  const [canAdd, setCanAdd] = useState(false);
+  const [langs, setLangs] = useState([]);
+  const [dbTags, setDbTags] = useState([]);
+  const [activeLang, setActiveLang] = useState('');
+  const [isLangSelected, setIsLangSelected] = useState(false);
+  const [unUsed, setUnused] = useState([]);
+  console.log(props.columns);
+  console.log(dbTags);
 
-  const handleChange = (e, lang) => {
-    switch (lang) {
-      case 'eng':
-        setEng(e.target.value);
-        break;
-      case 'fi':
-        setFi(e.target.value);
-        break;
-      case 'swe':
-        setSwe(e.target.value);
-        break;
-      case 'ru':
-        setRu(e.target.value);
-        break;
-      case 'tags':
-        setTags(e.target.value);
-        setCanAdd(true);
-        if (e.target.value === '') {
-          setCanAdd(false);
-        }
-        break;
-      default:
-        break;
-    }
-  };
+  useEffect(() => {
+    setActiveLang('Select language');
+    df.getAllDifferentTags().then((res) => setDbTags(res));
+  }, []);
 
-  const addWord = () => {
-    let word = {
-      tags: tags,
-      English: eng,
-      Finnish: fi,
-      Swedish: swe,
-      Russian: ru,
-    };
-    console.log(word);
-    df.postNewWord(word);
+  const getLanguages = () => {
+    let n = [];
+    props.columns.forEach((col) => {
+      if (
+        col['column_name'].includes('ish') ||
+        col['column_name'].includes('ian')
+      ) {
+        let m = col['column_name'].split('_');
+        n.push(m[0]);
+      }
+    });
+    setLangs(n);
   };
 
   const handleClose = () => {
@@ -59,85 +41,57 @@ function MyForm(props) {
   // If props.isAdd is true, then return this form and on
   // Add button click post the data to database.
   if (props.isAdd) {
-    return (
-      <Form id="form">
-        <Form.Label>
-          <h3>Add a word and at least one translation</h3>
-        </Form.Label>
-        <Form.Group className="mb-3" controlId="eng">
-          <Form.Label>Tags:</Form.Label>
-          <Form.Control
-            onChange={(e) => handleChange(e, 'tags')}
-            type="text"
-            placeholder="tags (must input)"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="eng">
-          <Form.Label>English:</Form.Label>
-          <Form.Control
-            onChange={(e) => handleChange(e, 'eng')}
-            type="text"
-            placeholder="word (can be left empty)"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="fi">
-          <Form.Label>Finnish:</Form.Label>
-          <Form.Control
-            onChange={(e) => handleChange(e, 'fi')}
-            type="text"
-            placeholder="sana (can be left empty)"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="swe">
-          <Form.Label>Swedish:</Form.Label>
-          <Form.Control
-            onChange={(e) => handleChange(e, 'swe')}
-            type="text"
-            placeholder="ord (can be left empty)"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="ru">
-          <Form.Label>Russian:</Form.Label>
-          <Form.Control
-            onChange={(e) => handleChange(e, 'ru')}
-            type="text"
-            placeholder="слово (can be left empty)"
-          />
-        </Form.Group>
-        <Row>
-          <Col>
-            <Button
-              disabled={!canAdd}
-              onClick={() => addWord()}
-              variant="success"
-            >
-              Add
-            </Button>
-          </Col>
-          <Col>
-            <Button onClick={() => handleClose()} variant="primary">
-              Go back
-            </Button>
-          </Col>
-        </Row>
-      </Form>
-    );
+    return <Add handleClose={handleClose} />;
   }
+
+  const handleDelLangSelect = (language) => {
+    let ls = langs.filter((l) => language !== l);
+    if (ls.length !== langs.length) {
+      setIsLangSelected(true);
+    }
+    setUnused(ls);
+    setActiveLang(language);
+  };
 
   // If props.isDel is true, then return this form
   if (props.isDel) {
     return (
       <Form id="form">
+        <Form.Label>
+          <h4>
+            Delete by selecting a language and tag or just search for a word:
+          </h4>
+        </Form.Label>
+        <Dropdown onClick={() => getLanguages()}>
+          <Dropdown.Toggle className="mb-2" variant="danger">
+            {activeLang}
+          </Dropdown.Toggle>
+          <Dropdown.Menu variant="dark">
+            {!isLangSelected &&
+              langs.map((index, lang) => {
+                return (
+                  <Dropdown.Item
+                    key={index}
+                    onClick={() => handleDelLangSelect(langs[lang])}
+                  >
+                    {langs[lang]}
+                  </Dropdown.Item>
+                );
+              })}
+            {isLangSelected &&
+              unUsed.map((index, lang) => {
+                return (
+                  <Dropdown.Item
+                    key={index}
+                    onClick={() => handleDelLangSelect(unUsed[lang])}
+                  >
+                    {unUsed[lang]}
+                  </Dropdown.Item>
+                );
+              })}
+          </Dropdown.Menu>
+        </Dropdown>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>
-            <h4>
-              Delete by selecting a language and tag or just search for a word:
-            </h4>
-          </Form.Label>
           <Form.Control type="text" placeholder="intial" />
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
@@ -156,6 +110,8 @@ function MyForm(props) {
       </Form>
     );
   }
+
+  // If props.isDel is true, then return this form
   if (props.isMod) {
     return (
       <Form id="form">
