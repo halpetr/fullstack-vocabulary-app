@@ -1,4 +1,5 @@
 const express = require('express');
+const { route } = require('express/lib/router');
 
 var router = express.Router();
 
@@ -67,6 +68,18 @@ router.route('/tags').get(async (req, res, next) => {
   } catch (error) {
     res.statusCode = 400;
     res.send(error);
+  }
+});
+
+router.route('/langtag').get(async (req, res, next) => {
+  try {
+    var langtag = req.query.langtag;
+    let data = await connection.getByLangTag(langtag);
+    res.statusCode = 200;
+    res.send(data);
+  } catch (error) {
+    res.send(error);
+    res.statusCode = 400;
   }
 });
 

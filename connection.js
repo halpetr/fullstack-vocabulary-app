@@ -111,6 +111,24 @@ let connectionFunctions = {
       });
     }),
 
+  getByLangTag: async (langtag) =>
+    new Promise((resolve, reject) => {
+      let data = langtag.split('_');
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `SELECT tags, ${data[0]} FROM Vocabulary WHERE
+                      tags = ${connection.escape(data[1])};`;
+        connection.query(sql, (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+          connection.release();
+          if (err) throw err;
+        });
+      });
+    }),
+
   getAllDifferentTags: () =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {

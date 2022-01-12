@@ -23,6 +23,19 @@ const Datafunctions = {
     }
   },
 
+  getByLangTag: async (lang, tag) => {
+    try {
+      let langtag = `${lang}_${tag}`;
+      console.log(langtag);
+      let { data } = await axios.get(
+        `http://localhost:8080/vocabulary/langtag?langtag=${langtag}`
+      );
+      return data;
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
   getAllDifferentTags: async () => {
     try {
       let { data } = await axios.get(`http://localhost:8080/vocabulary/tags`);
