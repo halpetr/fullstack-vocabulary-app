@@ -23,6 +23,15 @@ const Datafunctions = {
     }
   },
 
+  getAllDifferentTags: async () => {
+    try {
+      let { data } = await axios.get(`http://localhost:8080/vocabulary/tags`);
+      return data;
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
   deleteById: async (id) => {
     try {
       await axios.delete(`http://localhost:8080/vocabulary/id?id=${id}`);

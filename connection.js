@@ -111,6 +111,22 @@ let connectionFunctions = {
       });
     }),
 
+  getAllDifferentTags: () =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = 'SELECT DISTINCT tags from Vocabulary;';
+        connection.query(sql, (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+          connection.release();
+          if (err) throw err;
+        });
+      });
+    }),
+
   getDatabaseColumns: () =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {

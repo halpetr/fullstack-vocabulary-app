@@ -59,6 +59,17 @@ router.route('/tag').get(async (req, res, next) => {
   }
 });
 
+router.route('/tags').get(async (req, res, next) => {
+  try {
+    let data = await connection.getAllDifferentTags();
+    res.statusCode = 200;
+    res.send(data);
+  } catch (error) {
+    res.statusCode = 400;
+    res.send(error);
+  }
+});
+
 router.route('/cols').get(async (req, res, next) => {
   try {
     let data = await connection.getDatabaseColumns();
