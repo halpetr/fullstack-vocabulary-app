@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Nav, Row, Col } from 'react-bootstrap';
 import df from '../Datafunctions/Datafunctions';
+import { useHistory } from 'react-router-dom';
 
 function MyForm(props) {
   const [eng, setEng] = useState('');
@@ -46,6 +47,13 @@ function MyForm(props) {
     };
     console.log(word);
     df.postNewWord(word);
+  };
+
+  const handleClose = () => {
+    props.setOptionSelected(false);
+    props.setIsAdd(false);
+    props.setIsDel(false);
+    props.setIsMod(false);
   };
 
   // If props.isAdd is true, then return this form and on
@@ -100,9 +108,22 @@ function MyForm(props) {
             placeholder="слово (can be left empty)"
           />
         </Form.Group>
-        <Button disabled={!canAdd} onClick={() => addWord()} variant="success">
-          Add
-        </Button>
+        <Row>
+          <Col>
+            <Button
+              disabled={!canAdd}
+              onClick={() => addWord()}
+              variant="success"
+            >
+              Add
+            </Button>
+          </Col>
+          <Col>
+            <Button onClick={() => handleClose()} variant="primary">
+              Go back
+            </Button>
+          </Col>
+        </Row>
       </Form>
     );
   }
@@ -112,12 +133,17 @@ function MyForm(props) {
     return (
       <Form id="form">
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Delete</Form.Label>
+          <Form.Label>
+            <h4>
+              Delete by selecting a language and tag or just search for a word:
+            </h4>
+          </Form.Label>
           <Form.Control type="text" placeholder="intial" />
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
           </Form.Text>
         </Form.Group>
+        <Button variant="danger">Search</Button>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
@@ -126,9 +152,7 @@ function MyForm(props) {
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Check me out" />
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
+        <Button variant="danger">Delete</Button>
       </Form>
     );
   }
