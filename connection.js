@@ -143,6 +143,24 @@ let connectionFunctions = {
       });
     }),
 
+  getRandomWordsBasedOnTag: (lang, tag) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        console.log(tag);
+        var sql = `SELECT ${lang} FROM Vocabulary WHERE tags = ${connection.escape(
+          tag
+        )} ORDER BY RAND() LIMIT 10;`;
+        connection.query(sql, (error, resu) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(resu);
+          connection.release();
+        });
+      });
+    }),
+
   getByLangTag: async (langtag) =>
     new Promise((resolve, reject) => {
       let data = langtag.split('_');

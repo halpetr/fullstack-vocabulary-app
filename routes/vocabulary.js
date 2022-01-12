@@ -67,6 +67,22 @@ router.route('/randnotag').get(async (req, res, next) => {
   }
 });
 
+router.route('/randwtag').get(async (req, res, next) => {
+  try {
+    var randwtag = req.query.randwtag.split('_');
+    console.log(randwtag[0], randwtag[1]);
+    let data = await connection.getRandomWordsBasedOnTag(
+      randwtag[0],
+      randwtag[1]
+    );
+    res.statusCode = 200;
+    res.send(data);
+  } catch (error) {
+    res.send(error);
+    res.statusCode = 400;
+  }
+});
+
 router.route('/tag').get(async (req, res, next) => {
   try {
     var tag = req.query.tag;

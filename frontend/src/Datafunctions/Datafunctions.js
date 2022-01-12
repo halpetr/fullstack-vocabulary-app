@@ -46,6 +46,18 @@ const Datafunctions = {
     }
   },
 
+  getRandomWordsBasedOnTag: async (lang, tag) => {
+    try {
+      let randwtag = `${lang}_${tag}`;
+      let { data } = await axios.get(
+        `http://localhost:8080/vocabulary/randwtag?randwtag=${randwtag}`
+      );
+      return data;
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
   getByLangTag: async (lang, tag) => {
     try {
       let langtag = `${lang}_${tag}`;
