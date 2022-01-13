@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import MyForm from '../Components/MyForm';
-import { Form, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
-function AddWords() {
+function AddWords(props) {
   const [optionSelected, setOptionSelected] = useState(false);
-  const [buttonPressed, setButtonPressed] = useState('');
   const [isAdd, setIsAdd] = useState(false);
   const [isDel, setIsDel] = useState(false);
-  const [isMod, setIsMod] = useState(false);
 
   const handleClick = (string) => {
     console.log(string);
@@ -18,47 +16,49 @@ function AddWords() {
       case 'Delete':
         setIsDel(true);
         break;
-      case 'Modify':
-        setIsMod(true);
-        break;
       default:
         setIsAdd(false);
         break;
     }
-    setButtonPressed(string);
     setOptionSelected(true);
   };
 
   if (!optionSelected) {
     return (
-      <div id="myform">
+      <div id="add">
         <h5
           style={{
-            backgroundColor: 'white',
             maxWidth: '40vw',
             marginLeft: 'auto',
             marginRight: 'auto',
             borderRadius: '10px',
+            padding: '5px',
           }}
         >
           Select what you want to do:
         </h5>
         <div id="formbuttons">
           <Button variant="success" onClick={() => handleClick('Add')}>
-            Add a word
+            Add
           </Button>
           <Button variant="danger" onClick={() => handleClick('Delete')}>
-            Delete a word
-          </Button>
-          <Button variant="info" onClick={() => handleClick('Modify')}>
-            Modify a word
+            Delete / Modify
           </Button>
         </div>
       </div>
     );
   }
   if (optionSelected) {
-    return <MyForm buttonPressed={buttonPressed} />;
+    return (
+      <MyForm
+        isAdd={isAdd}
+        setIsAdd={setIsAdd}
+        setOptionSelected={setOptionSelected}
+        isDel={isDel}
+        setIsDel={setIsDel}
+        columns={props.columns}
+      />
+    );
   }
 }
 
