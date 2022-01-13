@@ -6,11 +6,10 @@ function DelForm(props) {
   const [activeLang, setActiveLang] = useState('');
   const [activeSearch, setActiveSearch] = useState('');
   const [isLangSelected, setIsLangSelected] = useState(false);
-  const [isTagSelected, setIsTagSelected] = useState(false);
   const [unUsedLangs, setUnusedLangs] = useState([]);
   const [langTags, setLangTags] = useState([]);
   const [showTable, setShowTable] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+  const [disableSearch, setDisableSearch] = useState(true);
   console.log(langTags);
 
   useEffect(() => {
@@ -34,6 +33,22 @@ function DelForm(props) {
   const handleSearchChange = (event) => {
     event.preventDefault();
     setActiveSearch(event.target.value);
+    if (activeSearch !== '') {
+      setDisableSearch(false);
+    }
+    if (event.target.value === '') {
+      setDisableSearch(true);
+    }
+  };
+
+  const handleDelete = (lt) => {
+    console.log(lt);
+    df.deleteById(lt.id);
+    df.getBySearch(activeLang, activeSearch).then((res) => setLangTags(res));
+    setShowTable(false);
+    setTimeout(() => {
+      setShowTable(true);
+    }, 100);
   };
 
   return (
@@ -88,7 +103,9 @@ function DelForm(props) {
               <tr key={index}>
                 <td>{lt[activeLang]}</td>
                 <td style={{ textAlign: 'center' }}>
-                  <Button variant="danger">X</Button>
+                  <Button onClick={() => handleDelete(lt)} variant="danger">
+                    X
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -107,14 +124,13 @@ function DelForm(props) {
       <Row>
         {isLangSelected && (
           <Col>
-            <Button variant="danger" onClick={() => handleSearch()}>
+            <Button
+              disabled={disableSearch}
+              variant="danger"
+              onClick={() => handleSearch()}
+            >
               Search
             </Button>
-          </Col>
-        )}
-        {showDelete && (
-          <Col>
-            <Button variant="danger">Delete</Button>
           </Col>
         )}
       </Row>
