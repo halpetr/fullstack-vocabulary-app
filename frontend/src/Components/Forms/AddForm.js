@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
+import FadeIn from 'react-fade-in';
+import { BsCheckCircleFill } from 'react-icons/bs';
 import df from '../../Datafunctions/Datafunctions';
 
 function AddForm(props) {
@@ -9,6 +11,7 @@ function AddForm(props) {
   const [ru, setRu] = useState('');
   const [tags, setTags] = useState('');
   const [canAdd, setCanAdd] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e, lang) => {
     switch (lang) {
@@ -44,8 +47,19 @@ function AddForm(props) {
       Swedish: swe,
       Russian: ru,
     };
-    console.log(word);
-    df.postNewWord(word);
+    df.postNewWord(word).then((res) => {
+      if (res === 'success') {
+        setSuccess(true);
+        setTags('');
+        setEng('');
+        setFi('');
+        setSwe('');
+        setRu('');
+        setTimeout(() => {
+          setSuccess(false);
+        }, 4000);
+      }
+    });
   };
 
   return (
@@ -57,6 +71,7 @@ function AddForm(props) {
         <Form.Label>Tags:</Form.Label>
         <Form.Control
           onChange={(e) => handleChange(e, 'tags')}
+          value={tags}
           type="text"
           placeholder="tags (must input)"
         />
@@ -66,6 +81,7 @@ function AddForm(props) {
         <Form.Label>English:</Form.Label>
         <Form.Control
           onChange={(e) => handleChange(e, 'eng')}
+          value={eng}
           type="text"
           placeholder="word (can be left empty)"
         />
@@ -75,6 +91,7 @@ function AddForm(props) {
         <Form.Label>Finnish:</Form.Label>
         <Form.Control
           onChange={(e) => handleChange(e, 'fi')}
+          value={fi}
           type="text"
           placeholder="sana (can be left empty)"
         />
@@ -84,6 +101,7 @@ function AddForm(props) {
         <Form.Label>Swedish:</Form.Label>
         <Form.Control
           onChange={(e) => handleChange(e, 'swe')}
+          value={swe}
           type="text"
           placeholder="ord (can be left empty)"
         />
@@ -93,12 +111,14 @@ function AddForm(props) {
         <Form.Label>Russian:</Form.Label>
         <Form.Control
           onChange={(e) => handleChange(e, 'ru')}
+          value={ru}
           type="text"
           placeholder="слово (can be left empty)"
         />
       </Form.Group>
+
       <Row>
-        <Col>
+        <Col xs={1}>
           <Button
             disabled={!canAdd}
             onClick={() => addWord()}
@@ -106,6 +126,15 @@ function AddForm(props) {
           >
             Add
           </Button>
+        </Col>
+        <Col xs={3}>
+          {success && (
+            <FadeIn>
+              <div>
+                <BsCheckCircleFill id="addcheck" />
+              </div>
+            </FadeIn>
+          )}
         </Col>
         <Col>
           <Button onClick={() => props.handleClose()} variant="primary">
