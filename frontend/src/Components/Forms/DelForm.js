@@ -42,12 +42,7 @@ function DelForm(props) {
 
   const handleDelete = (lt) => {
     console.log(lt);
-    df.deleteById(lt.id);
-    df.getBySearch(activeLang, activeSearch).then((res) => setLangTags(res));
-    setShowTable(false);
-    setTimeout(() => {
-      setShowTable(true);
-    }, 100);
+    df.deleteById(lt.id).then((res) => handleSearch());
   };
 
   return (
@@ -100,9 +95,20 @@ function DelForm(props) {
           <tbody>
             {langTags.map((lt, index) => (
               <tr key={index}>
-                <td>{lt[activeLang]}</td>
+                <td style={{ textAlign: 'center' }}>{lt[activeLang]}</td>
                 <td style={{ textAlign: 'center' }}>
-                  <Button onClick={() => handleDelete(lt)} variant="danger">
+                  <Button
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          `Are you sure you wish to delete the word: ${lt[activeLang]}?`
+                        )
+                      ) {
+                        handleDelete(lt);
+                      }
+                    }}
+                    variant="danger"
+                  >
                     X
                   </Button>
                 </td>
