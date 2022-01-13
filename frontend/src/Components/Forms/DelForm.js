@@ -10,7 +10,6 @@ function DelForm(props) {
   const [langTags, setLangTags] = useState([]);
   const [showTable, setShowTable] = useState(false);
   const [disableSearch, setDisableSearch] = useState(true);
-  console.log(langTags);
 
   useEffect(() => {
     setActiveLang('Select language');
@@ -33,7 +32,7 @@ function DelForm(props) {
   const handleSearchChange = (event) => {
     event.preventDefault();
     setActiveSearch(event.target.value);
-    if (activeSearch !== '') {
+    if (event.target.value !== '') {
       setDisableSearch(false);
     }
     if (event.target.value === '') {
