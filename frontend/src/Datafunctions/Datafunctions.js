@@ -12,6 +12,17 @@ const Datafunctions = {
     }
   },
 
+  getById: async (id) => {
+    try {
+      let { data } = await axios.get(
+        `http://localhost:8080/vocabulary/id?id=${id}`
+      );
+      return data;
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
   getByTag: async (tag) => {
     try {
       let { data } = await axios.get(
@@ -97,6 +108,7 @@ const Datafunctions = {
         Swedish: body.Swedish,
         Russian: body.Russian,
       });
+      return 'success';
     } catch (error) {
       return console.log(error);
     }

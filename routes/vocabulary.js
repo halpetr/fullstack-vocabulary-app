@@ -135,17 +135,51 @@ router.route('/cols').get(async (req, res, next) => {
   }
 });
 
-router.route('/id').delete(async (req, res, next) => {
-  try {
+router
+  .route('/id')
+  .get(async (req, res, next) => {
     let id = parseInt(req.query.id);
-    await connection.deleteById(id);
-    res.statusCode = 200;
-    res.send({ msg: 'Deleted!' });
-  } catch (error) {
-    res.send(error);
-    res.statusCode = 404;
-  }
-});
+    try {
+      if (!isNaN(id)) {
+        let data = await connection.getById(id);
+        if (data.length === 0) {
+          res.statusCode = 404;
+          res.send({ msg: `No entries with ID: ${id}!` });
+        } else {
+          res.send(data);
+          res.statusCode = 200;
+        }
+      } else {
+        res.statusCode = 400;
+        res.send({ msg: 'id not a number' });
+      }
+    } catch (error) {
+      res.send(error);
+      res.statusCode = 400;
+    }
+  })
+  .delete(async (req, res, next) => {
+    try {
+      let id = parseInt(req.query.id);
+      if (!isNaN(id)) {
+        let data = await connection.deleteById(id);
+        console.log(data);
+        if (data.affectedRows === 0) {
+          res.statusCode = 404;
+          res.send({ msg: `No entries with ID: ${id}!` });
+        } else {
+          res.statusCode = 200;
+          res.send({ msg: 'Deleted!' });
+        }
+      } else {
+        res.statusCode = 400;
+        res.send({ msg: 'id not a number' });
+      }
+    } catch (error) {
+      res.send(error);
+      res.statusCode = 404;
+    }
+  });
 
 router.route('/mod').patch(async (req, res, next) => {
   try {

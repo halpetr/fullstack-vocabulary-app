@@ -128,6 +128,25 @@ let connectionFunctions = {
       });
     }),
 
+  getById: async (id) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `SELECT * FROM Vocabulary WHERE id = ${connection.escape(
+          id
+        )};`;
+        console.log(sql);
+        connection.query(sql, (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+          connection.release();
+          if (err) throw err;
+        });
+      });
+    }),
+
   getRandomWords: (lang) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
@@ -222,7 +241,7 @@ let connectionFunctions = {
           if (error) {
             reject(error);
           }
-          resolve({ msg: 'Deleted successfully!' });
+          resolve(result);
           connection.release();
           if (err) throw err;
         });
