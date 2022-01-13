@@ -14,6 +14,7 @@ function DelForm(props) {
   const [disableSearch, setDisableSearch] = useState(true);
   const [showMod, setShowMod] = useState(false);
   const [clickedWordId, setClickedWordId] = useState(0);
+  const [word, setWord] = useState('');
 
   console.log('showMod', showMod);
 
@@ -51,8 +52,9 @@ function DelForm(props) {
     df.deleteById(lt.id).then((res) => handleSearch());
   };
 
-  const handleModOpen = (id) => {
+  const handleModOpen = (id, currentWord) => {
     setClickedWordId(id);
+    setWord(currentWord);
     setShowMod(true);
   };
 
@@ -114,7 +116,7 @@ function DelForm(props) {
                   <td style={{ textAlign: 'center' }}>{lt[activeLang]}</td>
                   <td style={{ textAlign: 'center' }}>
                     <Button
-                      onClick={() => handleModOpen(lt.id)}
+                      onClick={() => handleModOpen(lt.id, lt[activeLang])}
                       size="sm"
                       variant="info"
                       id="edit-btn"
@@ -179,6 +181,8 @@ function DelForm(props) {
           showMod={showMod}
           setShowMod={setShowMod}
           wordId={clickedWordId}
+          activeLang={activeLang}
+          word={word}
         />
       )}
     </>
