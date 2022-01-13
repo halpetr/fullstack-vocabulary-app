@@ -50,7 +50,7 @@ let connectionFunctions = {
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        var sql = `SELECT id, ${sourceLang}, ${targetLang} FROM Vocabulary;`;
+        var sql = `SELECT id, ${sourceLang}, ${targetLang} FROM Vocabulary ORDER BY RAND() LIMIT 10;`;
         connection.query(sql, (error, result) => {
           if (error) {
             reject(error);
