@@ -15,7 +15,6 @@ function Admin(props) {
   const [pw, setPw] = useState('');
 
   const handleClick = (string) => {
-    console.log(string);
     switch (string) {
       case 'Add':
         setIsAdd(true);
@@ -32,7 +31,6 @@ function Admin(props) {
 
   const handleChange = (e, input) => {
     e.preventDefault();
-    console.log(e.target.value);
     if (input === 'pw') {
       setPw(e.target.value);
     } else {
@@ -113,7 +111,7 @@ function Admin(props) {
           />
         </Form.Group>
         <Row>
-          <Col xs={3}>
+          <Col xs={5}>
             <Button onClick={() => handleLogin()} variant="primary">
               Log In
             </Button>

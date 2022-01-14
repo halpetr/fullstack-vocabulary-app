@@ -8,8 +8,6 @@ function Main(props) {
 
   const setLanguages = (sourceLang, targetLang, tag) => {
     let result = sourceLang + '_' + targetLang;
-    console.log(tag);
-    console.log(result);
     props.setTag(tag);
     props.setLanguages(result);
   };

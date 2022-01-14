@@ -13,7 +13,6 @@ router.route('/register').post(async (req, res, next) => {
     var body = req.body;
     bcrypt.hash(body.pw, saltRounds, async (err, hash) => {
       let data = await connection.registerUser(body.user, hash);
-      console.log(data);
       res.statusCode = 200;
       res.send(data);
     });
