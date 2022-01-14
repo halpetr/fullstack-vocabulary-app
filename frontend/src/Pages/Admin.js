@@ -14,6 +14,8 @@ function Admin(props) {
   const [user, setUser] = useState('');
   const [pw, setPw] = useState('');
 
+  console.log(isLoggedIn);
+
   const handleClick = (string) => {
     switch (string) {
       case 'Add':
