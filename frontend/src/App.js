@@ -3,24 +3,29 @@ import Navigation from './Navbar/Navigation';
 import { Route, Routes } from 'react-router-dom';
 import Main from './Pages/Main';
 import NotFound from './Pages/NotFound';
-import AddWords from './Pages/AddWords';
+import Admin from './Pages/Admin';
 import df from './Datafunctions/Datafunctions';
+import Select from './Pages/Select';
 
 function App() {
   const [selectedLangWords, setSelectedLangWords] = useState([]);
   const [languages, setLanguages] = useState('');
-  const [test, setTest] = useState([]);
   const [databaseCols, setDatabaseCols] = useState([]);
+  const [tag, setTag] = useState('');
   console.log('LANGS', languages);
+  console.log('WORDS', selectedLangWords);
 
   useEffect(() => {
     if (languages !== '') {
       df.getSelectedLanguages(languages).then((res) =>
         setSelectedLangWords(res)
       );
+      if (tag !== 'Select topic') {
+        df.getByTag(tag).then((res) => setSelectedLangWords(res));
+      }
+      console.log('wbt', tag);
     }
-    df.getByTag('animal').then((res) => setTest(res));
-  }, [languages]);
+  }, [languages, tag]);
 
   useEffect(() => {
     df.getDatabaseColumns().then((res) => setDatabaseCols(res.data));
@@ -40,11 +45,12 @@ function App() {
               setLanguages={setLanguages}
               languages={languages}
               columns={databaseCols}
+              setTag={setTag}
             />
           }
         />
-        <Route path="/select" exact element={<Main />} />
-        <Route path="add" exact element={<AddWords columns={databaseCols} />} />
+        <Route path="/select" exact element={<Select />} />
+        <Route path="/admin" exact element={<Admin columns={databaseCols} />} />
       </Routes>
     </div>
   );
