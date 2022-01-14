@@ -248,7 +248,7 @@ let connectionFunctions = {
       });
     }),
 
-  modifyEntry: (body) =>
+  modifyOneValue: (body) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
@@ -258,6 +258,30 @@ let connectionFunctions = {
         connection.query(sql, (error, result) => {
           if (error) reject(error);
           resolve({ msg: 'Modified successfully!' });
+          connection.release();
+          if (err) throw err;
+        });
+      });
+    }),
+
+  modifyAllValues: (body) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `UPDATE Vocabulary SET tags = ${connection.escape(
+          body.tags
+        )}, English = ${connection.escape(
+          body.English
+        )}, Finnish = ${connection.escape(
+          body.Finnish
+        )}, Swedish = ${connection.escape(
+          body.Swedish
+        )}, Russian = ${connection.escape(
+          body.Russian
+        )} WHERE id = ${connection.escape(body.id)};`;
+        connection.query(sql, (error, result) => {
+          if (error) reject(error);
+          resolve(result);
           connection.release();
           if (err) throw err;
         });

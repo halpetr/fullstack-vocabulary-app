@@ -183,7 +183,18 @@ router
 
 router.route('/mod').patch(async (req, res, next) => {
   try {
-    await connection.modifyEntry(req.body);
+    await connection.modifyOneValue(req.body);
+    res.statusCode = 200;
+    res.send(req.body);
+  } catch (error) {
+    res.send(error);
+    res.statusCode = 404;
+  }
+});
+
+router.route('/modall').patch(async (req, res, next) => {
+  try {
+    await connection.modifyAllValues(req.body);
     res.statusCode = 200;
     res.send(req.body);
   } catch (error) {

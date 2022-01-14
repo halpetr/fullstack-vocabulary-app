@@ -122,13 +122,32 @@ const Datafunctions = {
     }
   },
 
-  modifyEntry: async (id, column, value) => {
+  modifyOneValue: async (id, column, value) => {
     try {
       await axios.patch('http://localhost:8080/vocabulary/mod', {
         id: id,
         column: column,
         value: value,
       });
+    } catch (error) {
+      return console.log(error);
+    }
+  },
+
+  modifyAllValues: async (body) => {
+    try {
+      let { data } = await axios.patch(
+        'http://localhost:8080/vocabulary/modall',
+        {
+          id: body.id,
+          tags: body.tags,
+          English: body.English,
+          Finnish: body.Finnish,
+          Swedish: body.Swedish,
+          Russian: body.Russian,
+        }
+      );
+      return data;
     } catch (error) {
       return console.log(error);
     }
