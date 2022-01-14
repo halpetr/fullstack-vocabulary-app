@@ -4,6 +4,7 @@
   "description": "An application for learning vocabulary (English - Finnish). Built using React and Node.js.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
