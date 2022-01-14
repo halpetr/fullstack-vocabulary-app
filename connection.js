@@ -287,6 +287,40 @@ let connectionFunctions = {
         });
       });
     }),
+
+  registerUser: (user, pw) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `INSERT INTO Users (user, password) VALUES (${connection.escape(
+          user
+        )}, ${connection.escape(pw)});`;
+        console.log(sql);
+        connection.query(sql, (error, result) => {
+          if (error) reject(error);
+          resolve(result);
+          connection.release();
+          if (err) throw err;
+        });
+      });
+    }),
+
+  getUser: (user_id) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) throw err;
+        var sql = `SELECT user, password FROM Users WHERE user_id = ${connection.escape(
+          user_id
+        )};`;
+        console.log(sql);
+        connection.query(sql, (error, result) => {
+          if (error) reject(error);
+          resolve(result);
+          connection.release();
+          if (err) throw err;
+        });
+      });
+    }),
 };
 
 module.exports = connectionFunctions;
