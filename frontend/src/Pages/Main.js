@@ -6,9 +6,11 @@ function Main(props) {
   const [selected, setSelected] = useState(false);
   const [resetTable, setResetTable] = useState(false);
 
-  const selectLanguages = (sourceLang, targetLang) => {
+  const setLanguages = (sourceLang, targetLang, tag) => {
     let result = sourceLang + '_' + targetLang;
+    console.log(tag);
     console.log(result);
+    props.setTag(tag);
     props.setLanguages(result);
   };
 
@@ -16,7 +18,7 @@ function Main(props) {
     <div id="main">
       <DropMenu
         selectedLangs={props.selectedLangWords}
-        selectLanguages={selectLanguages}
+        setLanguages={setLanguages}
         setSelected={setSelected}
         setResetTable={setResetTable}
         columns={props.columns}
