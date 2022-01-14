@@ -11,7 +11,19 @@ body {
   max-width: 968px;
   margin-right: auto;
   margin-left: auto;
-  background-color: rgba(240, 128, 128, 0.707);
+  background: #0f2027; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #0f2027,
+    #203a43,
+    #2c5364
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #0f2027,
+    #203a43,
+    #2c5364
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   min-height: 98vh;
 }
 
@@ -34,11 +46,26 @@ body {
   border-radius: 10px;
 }
 
+#droprow {
+  margin-bottom: 2%;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: whitesmoke;
+  padding: 2%;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.13), 1px 2px 2px rgba(0, 0, 0, 0.1),
+    -1px -2px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+#drop-btn-col {
+  margin-top: 3%;
+}
+
 #toggle {
   border: 1px darkblue solid;
 }
 
-/* ADDWORDS */
+/* Admin */
 #add {
   margin-top: 2%;
   max-width: 75vw;
@@ -61,13 +88,30 @@ body {
   display: flex;
   justify-content: space-around;
 }
+
+#loginForm {
+  background-color: whitesmoke;
+  margin-top: 2%;
+  padding: 3%;
+  border-radius: 10px;
+  max-width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#error {
+  font-size: 200%;
+  margin-top: 3px;
+  color: red;
+}
+
 /* AddForm */
 #form {
   background-color: whitesmoke;
   margin-top: 2%;
   padding: 3%;
   border-radius: 10px;
-  max-width: 95%;
+  max-width: 75%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -101,13 +145,17 @@ body {
   margin-top: 2%;
   padding: 3%;
   border-radius: 10px;
-  max-width: 95%;
+  max-width: 75%;
   margin-left: auto;
   margin-right: auto;
 }
 
 #modal {
-  margin-top: 10vh;
+  margin-top: 5px;
+}
+
+#mod-btn {
+  margin-right: 5px;
 }
 
 /* NAVIGATION */
