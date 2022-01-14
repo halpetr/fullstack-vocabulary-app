@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import FadeIn from 'react-fade-in';
 import { BsCheckCircleFill } from 'react-icons/bs';
@@ -57,7 +57,7 @@ function AddForm(props) {
         setRu('');
         setTimeout(() => {
           setSuccess(false);
-        }, 4000);
+        }, 3000);
       }
     });
   };
