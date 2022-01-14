@@ -10,6 +10,8 @@ function ModForm(props) {
   const [isItemSelected, setIsItemSelected] = useState(false);
   const [tableItems, setTableItems] = useState([]);
   const [modAll, setModAll] = useState(false);
+  const [modItem, setModItem] = useState({});
+  const [singleItem, setSingleItem] = useState('');
   const [eng, setEng] = useState('');
   const [fi, setFi] = useState('');
   const [swe, setSwe] = useState('');
@@ -29,7 +31,7 @@ function ModForm(props) {
         if (i === 'tags') {
           res.push('Tags');
         } else if (i !== 'id') {
-          res.push(i + ' word');
+          res.push(i);
         }
       }
     }
@@ -76,6 +78,8 @@ function ModForm(props) {
     let it = items.filter((i) => item !== i);
     if (item === 'Modify All') {
       setModAll(true);
+    } else {
+      setModAll(false);
     }
     setUnUsed(it);
     setActiveItem(item);
@@ -90,7 +94,21 @@ function ModForm(props) {
 
   const handleSingleChange = (e) => {
     e.preventDefault();
-    console.log(e.target.value);
+    setSingleItem(e.target.value);
+    console.log(activeItem, e.target.value);
+    if (activeItem === 'Tags') {
+      setModItem({
+        id: props.wordId,
+        column: 'tags',
+        value: e.target.value,
+      });
+    } else {
+      setModItem({
+        id: props.wordId,
+        column: activeItem,
+        value: e.target.value,
+      });
+    }
   };
 
   const handleModAllChange = (e, lang) => {
@@ -116,18 +134,34 @@ function ModForm(props) {
   };
 
   const handleModify = () => {
-    let body = {
-      id: props.wordId,
-      tags: tags,
-      English: eng,
-      Finnish: fi,
-      Swedish: swe,
-      Russian: ru,
-    };
-    df.modifyAllValues(body).then((res) => {
-      let newWD = [res];
-      setWordData(newWD);
-    });
+    if (activeItem === 'Modify All') {
+      let body = {
+        id: props.wordId,
+        tags: tags,
+        English: eng,
+        Finnish: fi,
+        Swedish: swe,
+        Russian: ru,
+      };
+      df.modifyAllValues(body).then((res) => {
+        let newWD = [res];
+        setWordData(newWD);
+      });
+    } else {
+      df.modifyOneValue(modItem.id, modItem.column, modItem.value).then(
+        (res) => {
+          let { id, column, value } = res;
+          console.log(id, column, value);
+          console.log(wordData[0][column]);
+          wordData[0][column] = value;
+          console.log(wordData[0][column]);
+          console.log(wordData[0]);
+          let newData = [wordData[0]];
+          setWordData(newData);
+        }
+      );
+      setSingleItem('');
+    }
   };
 
   return (
@@ -188,6 +222,7 @@ function ModForm(props) {
                 type="text"
                 disabled={!isItemSelected}
                 placeholder="new value"
+                value={singleItem}
                 onChange={(e) => handleSingleChange(e)}
               />
             )}
