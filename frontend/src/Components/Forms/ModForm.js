@@ -9,6 +9,12 @@ function ModForm(props) {
   const [activeItem, setActiveItem] = useState('');
   const [isItemSelected, setIsItemSelected] = useState(false);
   const [tableItems, setTableItems] = useState([]);
+  const [modAll, setModAll] = useState(false);
+  const [eng, setEng] = useState('');
+  const [fi, setFi] = useState('');
+  const [swe, setSwe] = useState('');
+  const [ru, setRu] = useState('');
+  const [tags, setTags] = useState('');
 
   useEffect(() => {
     df.getById(props.wordId).then((res) => setWordData(res));
@@ -17,6 +23,7 @@ function ModForm(props) {
 
   useEffect(() => {
     let res = [];
+    res.push('Modify All');
     for (const item of wordData) {
       for (let i in item) {
         if (i === 'tags') {
@@ -39,6 +46,25 @@ function ModForm(props) {
             </tr>
           );
         }
+        switch (key) {
+          case 'English':
+            setEng(value);
+            break;
+          case 'Finnish':
+            setFi(value);
+            break;
+          case 'Swedish':
+            setSwe(value);
+            break;
+          case 'Russian':
+            setRu(value);
+            break;
+          case 'tags':
+            setTags(value);
+            break;
+          default:
+            break;
+        }
       });
       return k;
     });
@@ -48,6 +74,9 @@ function ModForm(props) {
 
   const handleSelect = (item) => {
     let it = items.filter((i) => item !== i);
+    if (item === 'Modify All') {
+      setModAll(true);
+    }
     setUnUsed(it);
     setActiveItem(item);
     if (it.length !== items.length) {
@@ -59,31 +88,76 @@ function ModForm(props) {
     props.setShowMod(false);
   };
 
+  const handleSingleChange = (e) => {
+    e.preventDefault();
+    console.log(e.target.value);
+  };
+
+  const handleModAllChange = (e, lang) => {
+    switch (lang) {
+      case 'eng':
+        setEng(e.target.value);
+        break;
+      case 'fi':
+        setFi(e.target.value);
+        break;
+      case 'swe':
+        setSwe(e.target.value);
+        break;
+      case 'ru':
+        setRu(e.target.value);
+        break;
+      case 'tags':
+        setTags(e.target.value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleModify = () => {
+    let body = {
+      id: props.wordId,
+      tags: tags,
+      English: eng,
+      Finnish: fi,
+      Swedish: swe,
+      Russian: ru,
+    };
+    df.modifyAllValues(body).then((res) => {
+      let newWD = [res];
+      setWordData(newWD);
+    });
+  };
+
   return (
     <Modal id="modal" show={props.showMod}>
       <Modal.Body>
         <Form id="modform">
-          <Form.Label>
-            <h5> Select what to modify:</h5>
-          </Form.Label>
           <Form.Group className="mb-3" controlId="table-dropmenu">
             <Form.Label>
-              Word selected is: <b>{props.word}</b>
+              Word to modify is: <b>{props.word}</b>
             </Form.Label>
 
-            <Table striped bordered style={{ textAlign: 'center' }}>
+            <Table
+              striped
+              bordered
+              style={{ textAlign: 'center', fontSize: '90%' }}
+            >
               <thead>
                 <tr>
-                  <th>Word:</th>
+                  <th>Title:</th>
                   <th>Data:</th>
                 </tr>
               </thead>
               <tbody>{tableItems.map((ti) => ti)}</tbody>
             </Table>
-
+            <Form.Label>
+              <h5> Select part to modify:</h5>
+            </Form.Label>
             <Dropdown className="mb-3">
-              <Dropdown.Toggle>{activeItem}</Dropdown.Toggle>
-              <Dropdown.Menu variant="dark">
+              <Dropdown.Toggle variant="info">{activeItem}</Dropdown.Toggle>
+              <Dropdown.Menu variant="info">
                 {!isItemSelected &&
                   items.map((item, index) => {
                     return (
@@ -109,15 +183,71 @@ function ModForm(props) {
               </Dropdown.Menu>
             </Dropdown>
             {isItemSelected && <Form.Label>{activeItem}:</Form.Label>}
-            <Form.Control
-              type="text"
-              disabled={isItemSelected}
-              placeholder="new value"
-            />
+            {!modAll && (
+              <Form.Control
+                type="text"
+                disabled={!isItemSelected}
+                placeholder="new value"
+                onChange={(e) => handleSingleChange(e)}
+              />
+            )}
+            {modAll && (
+              <>
+                <Form.Group className="mb-1" controlId="eng">
+                  <Form.Label>Tags:</Form.Label>
+                  <Form.Control
+                    onChange={(e) => handleModAllChange(e, 'tags')}
+                    value={tags}
+                    type="text"
+                    placeholder="tags"
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-1" controlId="eng">
+                  <Form.Label>English:</Form.Label>
+                  <Form.Control
+                    onChange={(e) => handleModAllChange(e, 'eng')}
+                    value={eng}
+                    type="text"
+                    placeholder="word"
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-1" controlId="fi">
+                  <Form.Label>Finnish:</Form.Label>
+                  <Form.Control
+                    onChange={(e) => handleModAllChange(e, 'fi')}
+                    value={fi}
+                    type="text"
+                    placeholder="sana"
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-1" controlId="swe">
+                  <Form.Label>Swedish:</Form.Label>
+                  <Form.Control
+                    onChange={(e) => handleModAllChange(e, 'swe')}
+                    value={swe}
+                    type="text"
+                    placeholder="ord"
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-1" controlId="ru">
+                  <Form.Label>Russian:</Form.Label>
+                  <Form.Control
+                    onChange={(e) => handleModAllChange(e, 'ru')}
+                    value={ru}
+                    type="text"
+                    placeholder="слово"
+                  />
+                </Form.Group>
+              </>
+            )}
           </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Submit
+          <Button onClick={() => handleModify()} id="mod-btn" variant="info">
+            Modify
           </Button>
           <Button onClick={() => closeMod()} variant="primary">
             Close
