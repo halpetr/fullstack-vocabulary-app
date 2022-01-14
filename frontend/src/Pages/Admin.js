@@ -111,7 +111,7 @@ function Admin(props) {
           />
         </Form.Group>
         <Row>
-          <Col xs={5}>
+          <Col xs={6}>
             <Button onClick={() => handleLogin()} variant="primary">
               Log In
             </Button>
