@@ -86,7 +86,7 @@ router.route('/randwtag').get(async (req, res, next) => {
 router.route('/tag').get(async (req, res, next) => {
   try {
     var tag = req.query.tag;
-    let data = await connection.findByTag(tag);
+    let data = await connection.getByTag(tag);
     if (data.length !== 0) {
       res.statusCode = 200;
       res.send(data);

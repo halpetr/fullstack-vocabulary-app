@@ -94,7 +94,7 @@ let connectionFunctions = {
    * @param {string} tag - The tag that is searched for in the database.
    * @returns {Promise}
    */
-  findByTag: (tag) =>
+  getByTag: (tag) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
@@ -185,8 +185,8 @@ let connectionFunctions = {
       let data = langtag.split('_');
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        var sql = `SELECT tags, ${data[0]} FROM Vocabulary WHERE
-                      tags = ${connection.escape(data[1])};`;
+        var sql = `SELECT tags, ${data[0]}, ${data[1]} FROM Vocabulary WHERE
+                      tags = ${connection.escape(data[2])};`;
         connection.query(sql, (error, result) => {
           if (error) {
             reject(error);
