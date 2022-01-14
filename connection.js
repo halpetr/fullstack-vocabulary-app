@@ -99,7 +99,7 @@ let connectionFunctions = {
       pool.getConnection((err, connection) => {
         if (err) throw err;
         var sql = `select * from Vocabulary where
-                      tags REGEXP '^.*${tag}.*$';`;
+                      tags REGEXP '^.*${tag}.*$' ORDER BY RAND() LIMIT 10;`;
         connection.query(sql, (error, result) => {
           if (error) {
             reject(error);
@@ -116,7 +116,6 @@ let connectionFunctions = {
       pool.getConnection((err, connection) => {
         if (err) throw err;
         var sql = `SELECT id, ${lang} FROM Vocabulary WHERE ${lang} REGEXP '^.*${srch}.*$';`;
-        console.log(sql);
         connection.query(sql, (error, result) => {
           if (error) {
             reject(error);
@@ -135,7 +134,6 @@ let connectionFunctions = {
         var sql = `SELECT * FROM Vocabulary WHERE id = ${connection.escape(
           id
         )};`;
-        console.log(sql);
         connection.query(sql, (error, result) => {
           if (error) {
             reject(error);
@@ -166,7 +164,6 @@ let connectionFunctions = {
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        console.log(tag);
         var sql = `SELECT ${lang} FROM Vocabulary WHERE tags = ${connection.escape(
           tag
         )} ORDER BY RAND() LIMIT 10;`;
@@ -295,7 +292,6 @@ let connectionFunctions = {
         var sql = `INSERT INTO Users (user, password) VALUES (${connection.escape(
           user
         )}, ${connection.escape(pw)});`;
-        console.log(sql);
         connection.query(sql, (error, result) => {
           if (error) reject(error);
           resolve(result);
@@ -312,7 +308,6 @@ let connectionFunctions = {
         var sql = `SELECT * FROM Users WHERE user = ${connection.escape(
           user
         )};`;
-        console.log(sql);
         connection.query(sql, (error, result) => {
           if (error) reject(error);
           resolve(result);
