@@ -124,11 +124,12 @@ const Datafunctions = {
 
   modifyOneValue: async (id, column, value) => {
     try {
-      await axios.patch('http://localhost:8080/vocabulary/mod', {
+      let { data } = await axios.patch('http://localhost:8080/vocabulary/mod', {
         id: id,
         column: column,
         value: value,
       });
+      return data;
     } catch (error) {
       return console.log(error);
     }

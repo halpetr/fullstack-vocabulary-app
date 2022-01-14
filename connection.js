@@ -257,7 +257,7 @@ let connectionFunctions = {
         )} WHERE id = ${connection.escape(body.id)};`;
         connection.query(sql, (error, result) => {
           if (error) reject(error);
-          resolve({ msg: 'Modified successfully!' });
+          resolve(result);
           connection.release();
           if (err) throw err;
         });
