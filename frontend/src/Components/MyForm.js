@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Nav, Row, Col, Dropdown } from 'react-bootstrap';
 import df from '../Datafunctions/Datafunctions';
 import AddForm from './Forms/AddForm';
 import DelForm from './Forms/DelForm';
@@ -7,8 +6,6 @@ import DelForm from './Forms/DelForm';
 function MyForm(props) {
   const [langs, setLangs] = useState([]);
   const [dbTags, setDbTags] = useState([]);
-  console.log(props.columns);
-  console.log(dbTags);
 
   useEffect(() => {
     df.getAllDifferentTags().then((res) => setDbTags(res));
