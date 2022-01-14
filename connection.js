@@ -309,7 +309,7 @@ let connectionFunctions = {
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        var sql = `SELECT user, password FROM Users WHERE user = ${connection.escape(
+        var sql = `SELECT * FROM Users WHERE user = ${connection.escape(
           user
         )};`;
         console.log(sql);

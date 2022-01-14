@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const jwt = require('jsonwebtoken');
 
 const connection = require('../connection');
 
@@ -29,6 +30,7 @@ router.route('/login').get(async (req, res, next) => {
     let data = await connection.getUser(loginInfo[0]);
     bcrypt.compare(loginInfo[1], data[0].password, function (err, result) {
       if (err) throw err;
+      console.log(result);
       res.statusCode = 200;
       res.send(result);
     });
