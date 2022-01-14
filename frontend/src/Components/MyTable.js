@@ -8,6 +8,7 @@ import {
   Table,
 } from 'react-bootstrap';
 import { ImCheckmark, ImCross } from 'react-icons/im';
+import FadeIn from 'react-fade-in/lib/FadeIn';
 
 function MyTable(props) {
   const [language1, setLanguage1] = useState([]);
@@ -17,12 +18,9 @@ function MyTable(props) {
   const [selectedWords, setSelectedWords] = useState([]);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
   const [currentValueArray, setCurrentValueArray] = useState([]);
-  console.log(props.langs);
-  console.log(checkArray);
 
   useEffect(() => {
     let la = props.langs.split('_');
-    console.log(la);
     setLanguage1(la[0]);
     setLanguage2(la[1]);
     setSelectedWords(props.selectedLangWords);
@@ -40,7 +38,6 @@ function MyTable(props) {
         a.push('');
       }
       setCurrentValueArray(a);
-      console.log(arr, props.selectedLangWords.length);
       return arr;
     };
     setCheckArray(initializeArrayForChecking(props.selectedLangWords));
@@ -52,11 +49,9 @@ function MyTable(props) {
 
   const handleChange = (e, word, index) => {
     e.preventDefault();
-    console.log(e.target.value.toLowerCase());
     let w = Array.from(currentValueArray);
     w[index] = e.target.value;
     setCurrentValueArray(w);
-    console.log(w);
     if (word[language2].toLowerCase() === e.target.value.toLowerCase()) {
       setToCorrect(index);
     } else {
@@ -71,7 +66,6 @@ function MyTable(props) {
         arr[i] = true;
       }
     }
-    console.log('arr', arr);
     setCheckArray(arr);
   };
 
@@ -82,7 +76,6 @@ function MyTable(props) {
         arr[i] = false;
       }
     }
-    console.log('arr', arr);
     setCheckArray(arr);
   };
 
@@ -129,24 +122,28 @@ function MyTable(props) {
                   {checkAnswers && (
                     <>
                       {checkArray[index] && (
-                        <ImCheckmark
-                          style={{
-                            visibility: checkArray[index]
-                              ? 'visible'
-                              : 'hidden',
-                          }}
-                          id="check"
-                        />
+                        <FadeIn>
+                          <ImCheckmark
+                            style={{
+                              visibility: checkArray[index]
+                                ? 'visible'
+                                : 'hidden',
+                            }}
+                            id="check"
+                          />
+                        </FadeIn>
                       )}
                       {!checkArray[index] && (
-                        <ImCross
-                          style={{
-                            visibility: !checkArray[index]
-                              ? 'visible'
-                              : 'hidden',
-                          }}
-                          id="cross"
-                        />
+                        <FadeIn>
+                          <ImCross
+                            style={{
+                              visibility: !checkArray[index]
+                                ? 'visible'
+                                : 'hidden',
+                            }}
+                            id="cross"
+                          />
+                        </FadeIn>
                       )}
                     </>
                   )}
