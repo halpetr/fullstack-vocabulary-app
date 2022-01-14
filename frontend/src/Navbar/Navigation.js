@@ -35,7 +35,7 @@ function Navigation(props) {
               className="mt-2"
               id="button"
               as={Link}
-              to="/add"
+              to="/admin"
               eventKey={3}
             >
               <BiCog style={{ fontSize: '150%' }} />
