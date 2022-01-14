@@ -12,18 +12,16 @@ function App() {
   const [languages, setLanguages] = useState('');
   const [databaseCols, setDatabaseCols] = useState([]);
   const [tag, setTag] = useState('');
-  console.log('LANGS', languages);
-  console.log('WORDS', selectedLangWords);
 
   useEffect(() => {
     if (languages !== '') {
-      df.getSelectedLanguages(languages).then((res) =>
-        setSelectedLangWords(res)
-      );
       if (tag !== 'Select topic') {
         df.getByTag(tag).then((res) => setSelectedLangWords(res));
+      } else {
+        df.getSelectedLanguages(languages).then((res) =>
+          setSelectedLangWords(res)
+        );
       }
-      console.log('wbt', tag);
     }
   }, [languages, tag]);
 
