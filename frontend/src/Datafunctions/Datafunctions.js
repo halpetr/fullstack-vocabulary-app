@@ -153,6 +153,21 @@ const Datafunctions = {
       return console.log(error);
     }
   },
+
+  getUser: async (body) => {
+    console.log(body.user);
+    console.log(body.pw);
+    let userpw = `${body.user}_${body.pw}`;
+    try {
+      let res = await axios.get(
+        `http://localhost:8080/users/login?login=${userpw}`
+      );
+      console.log(res);
+      return res;
+    } catch (error) {
+      return console.log(error);
+    }
+  },
 };
 
 export default Datafunctions;

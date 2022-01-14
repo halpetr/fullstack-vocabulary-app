@@ -14,29 +14,27 @@ router.route('/register').post(async (req, res, next) => {
     bcrypt.hash(body.pw, saltRounds, async (err, hash) => {
       let data = await connection.registerUser(body.user, hash);
       console.log(data);
+      res.statusCode = 200;
+      res.send(data);
     });
   } catch (error) {
-    return console.log(error);
+    res.statusCode = 400;
+    res.send(error);
   }
 });
 
 router.route('/login').get(async (req, res, next) => {
   try {
-    var id = req.body.user_id;
-    console.log(id);
-    let data = await connection.getUser(id);
-    return bcrypt.compare(
-      req.body.pw,
-      data[0].password,
-      function (err, result) {
-        if (result) {
-          return console.log(true);
-        }
-        if (err) throw err;
-      }
-    );
+    var loginInfo = req.query.login.split('_');
+    let data = await connection.getUser(loginInfo[0]);
+    bcrypt.compare(loginInfo[1], data[0].password, function (err, result) {
+      if (err) throw err;
+      res.statusCode = 200;
+      res.send(result);
+    });
   } catch (error) {
-    return console.log(error);
+    res.statusCode = 400;
+    res.send(error);
   }
 });
 

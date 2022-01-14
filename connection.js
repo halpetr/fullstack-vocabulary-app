@@ -305,12 +305,12 @@ let connectionFunctions = {
       });
     }),
 
-  getUser: (user_id) =>
+  getUser: (user) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, connection) => {
         if (err) throw err;
-        var sql = `SELECT user, password FROM Users WHERE user_id = ${connection.escape(
-          user_id
+        var sql = `SELECT user, password FROM Users WHERE user = ${connection.escape(
+          user
         )};`;
         console.log(sql);
         connection.query(sql, (error, result) => {
