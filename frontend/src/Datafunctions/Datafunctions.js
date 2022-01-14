@@ -3,9 +3,7 @@ import axios from 'axios';
 const Datafunctions = {
   getSelectedLanguages: async (langs) => {
     try {
-      let { data } = await axios.get(
-        `http://localhost:8080/vocabulary/langs?langs=${langs}`
-      );
+      let { data } = await axios.get(`/vocabulary/langs?langs=${langs}`);
       return data;
     } catch (error) {
       return console.log(error);
@@ -14,9 +12,7 @@ const Datafunctions = {
 
   getById: async (id) => {
     try {
-      let { data } = await axios.get(
-        `http://localhost:8080/vocabulary/id?id=${id}`
-      );
+      let { data } = await axios.get(`/vocabulary/id?id=${id}`);
       return data;
     } catch (error) {
       return console.log(error);
@@ -25,9 +21,7 @@ const Datafunctions = {
 
   getByTag: async (tag) => {
     try {
-      let { data } = await axios.get(
-        `http://localhost:8080/vocabulary/tag?tag=${tag}`
-      );
+      let { data } = await axios.get(`/vocabulary/tag?tag=${tag}`);
       return data;
     } catch (error) {
       return console.log(error);
@@ -37,9 +31,7 @@ const Datafunctions = {
   getBySearch: async (lang, srch) => {
     try {
       let search = `${lang}_${srch}`;
-      let { data } = await axios.get(
-        `http://localhost:8080/vocabulary/srch?srch=${search}`
-      );
+      let { data } = await axios.get(`/vocabulary/srch?srch=${search}`);
       return data;
     } catch (error) {
       return console.log(error);
@@ -48,9 +40,7 @@ const Datafunctions = {
 
   getRandomWords: async (lang) => {
     try {
-      let { data } = await axios.get(
-        `http://localhost:8080/vocabulary/randnotag?randnotag=${lang}`
-      );
+      let { data } = await axios.get(`/vocabulary/randnotag?randnotag=${lang}`);
       return data;
     } catch (error) {
       return console.log(error);
@@ -61,7 +51,7 @@ const Datafunctions = {
     try {
       let randwtag = `${lang}_${tag}`;
       let { data } = await axios.get(
-        `http://localhost:8080/vocabulary/randwtag?randwtag=${randwtag}`
+        `/vocabulary/randwtag?randwtag=${randwtag}`
       );
       return data;
     } catch (error) {
@@ -69,13 +59,11 @@ const Datafunctions = {
     }
   },
 
-  getByLangTag: async (lang, tag) => {
+  getByLangTag: async (lang1, lang2, tag) => {
     try {
-      let langtag = `${lang}_${tag}`;
+      let langtag = `${lang1}_${lang2}_${tag}`;
       console.log(langtag);
-      let { data } = await axios.get(
-        `http://localhost:8080/vocabulary/langtag?langtag=${langtag}`
-      );
+      let { data } = await axios.get(`/vocabulary/langtag?langtag=${langtag}`);
       return data;
     } catch (error) {
       return console.log(error);
@@ -84,7 +72,7 @@ const Datafunctions = {
 
   getAllDifferentTags: async () => {
     try {
-      let { data } = await axios.get(`http://localhost:8080/vocabulary/tags`);
+      let { data } = await axios.get(`/vocabulary/tags`);
       return data;
     } catch (error) {
       return console.log(error);
@@ -93,7 +81,7 @@ const Datafunctions = {
 
   deleteById: async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/vocabulary/id?id=${id}`);
+      await axios.delete(`/vocabulary/id?id=${id}`);
     } catch (error) {
       return console.log(error);
     }
@@ -101,7 +89,7 @@ const Datafunctions = {
 
   postNewWord: async (body) => {
     try {
-      await axios.post('http://localhost:8080/vocabulary', {
+      await axios.post('/vocabulary', {
         tags: body.tags,
         English: body.English,
         Finnish: body.Finnish,
@@ -116,7 +104,7 @@ const Datafunctions = {
 
   getDatabaseColumns: async () => {
     try {
-      return await axios.get('http://localhost:8080/vocabulary/cols');
+      return await axios.get('/vocabulary/cols');
     } catch (error) {
       return console.log(error);
     }
@@ -124,7 +112,7 @@ const Datafunctions = {
 
   modifyOneValue: async (id, column, value) => {
     try {
-      let { data } = await axios.patch('http://localhost:8080/vocabulary/mod', {
+      let { data } = await axios.patch('/vocabulary/mod', {
         id: id,
         column: column,
         value: value,
@@ -137,17 +125,14 @@ const Datafunctions = {
 
   modifyAllValues: async (body) => {
     try {
-      let { data } = await axios.patch(
-        'http://localhost:8080/vocabulary/modall',
-        {
-          id: body.id,
-          tags: body.tags,
-          English: body.English,
-          Finnish: body.Finnish,
-          Swedish: body.Swedish,
-          Russian: body.Russian,
-        }
-      );
+      let { data } = await axios.patch('/vocabulary/modall', {
+        id: body.id,
+        tags: body.tags,
+        English: body.English,
+        Finnish: body.Finnish,
+        Swedish: body.Swedish,
+        Russian: body.Russian,
+      });
       return data;
     } catch (error) {
       return console.log(error);
@@ -155,15 +140,9 @@ const Datafunctions = {
   },
 
   getUser: async (body) => {
-    console.log(body.user);
-    console.log(body.pw);
     let userpw = `${body.user}_${body.pw}`;
     try {
-      let res = await axios.get(
-        `http://localhost:8080/users/login?login=${userpw}`
-      );
-      console.log(res);
-      return res;
+      return await axios.get(`/users/login?login=${userpw}`);
     } catch (error) {
       return console.log(error);
     }
