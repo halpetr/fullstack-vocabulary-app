@@ -7,12 +7,15 @@ const port = process.env.PORT || 8080;
 
 const vocabulary = require('./routes/vocabulary');
 
+const users = require('./routes/users');
+
 /**
  * Middleware
  */
 app.use(express.json());
 app.use(cors());
 app.use('/vocabulary', vocabulary);
+app.use('/users', users);
 app.use(express.static('frontend/build'));
 
 /**
