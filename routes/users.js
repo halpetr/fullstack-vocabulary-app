@@ -23,13 +23,19 @@ router.route('/register').post(async (req, res, next) => {
 });
 
 router.route('/login').get(async (req, res, next) => {
-  var loginInfo = req.query.login.split('_');
-  let data = await connection.getUser(loginInfo[0]);
-  bcrypt.compare(loginInfo[1], data[0].password, function (err, result) {
-    if (err) throw err;
-    res.statusCode = 200;
-    res.send(result);
-  });
+  try {
+    var loginInfo = req.query.login.split('_');
+    let data = await connection.getUser(loginInfo[0]);
+    if (data.length !== 0) {
+      const match = await bcrypt.compare(loginInfo[1], data[0].password);
+      res.statusCode = 200;
+      res.send(match);
+    } else {
+      res.send(false);
+    }
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 module.exports = router;

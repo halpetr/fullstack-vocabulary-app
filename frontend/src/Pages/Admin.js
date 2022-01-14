@@ -41,17 +41,25 @@ function Admin(props) {
   };
 
   const handleLogin = () => {
-    let userinfo = { user: user, pw: pw };
-    df.getUser(userinfo).then((res) => {
-      if (res.data) {
-        setIsLoggedIn(true);
-      } else {
-        setShowX(true);
-        setTimeout(() => {
-          setShowX(false);
-        }, 3000);
-      }
-    });
+    if (user !== '' && pw !== '') {
+      let userinfo = { user: user, pw: pw };
+      df.getUser(userinfo).then((res) => {
+        console.log(res);
+        if (res.data) {
+          setIsLoggedIn(true);
+        } else {
+          setShowX(true);
+          setTimeout(() => {
+            setShowX(false);
+          }, 3000);
+        }
+      });
+    } else {
+      setShowX(true);
+      setTimeout(() => {
+        setShowX(false);
+      }, 3000);
+    }
   };
 
   if (isLoggedIn) {
