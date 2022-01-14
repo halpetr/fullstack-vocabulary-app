@@ -26,17 +26,8 @@ function Navigation(props) {
               className="mt-2"
               id="button"
               as={Link}
-              to="/select"
-              eventKey={2}
-            >
-              Select a word
-            </Nav.Link>
-            <Nav.Link
-              className="mt-2"
-              id="button"
-              as={Link}
               to="/admin"
-              eventKey={3}
+              eventKey={2}
             >
               <BiCog style={{ fontSize: '150%' }} />
             </Nav.Link>
