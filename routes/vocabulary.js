@@ -22,8 +22,10 @@ router
   .get(async (req, res) => {
     try {
       let p = await connection.getAll();
+      res.statusCode = 200;
       res.send(p);
     } catch (error) {
+      res.statusCode = 400;
       res.send(error);
     }
   });
@@ -31,7 +33,6 @@ router
 router.route('/langs').get(async (req, res, next) => {
   try {
     var langs = req.query.langs.split('_');
-    console.log(langs);
     let data = await connection.getSelectedLanguages(langs[0], langs[1]);
     res.statusCode = 200;
     res.send(data);
@@ -44,7 +45,6 @@ router.route('/langs').get(async (req, res, next) => {
 router.route('/srch').get(async (req, res, next) => {
   try {
     var x = req.query.srch.split('_');
-    console.log(x);
     let data = await connection.getBySearch(x[0], x[1]);
     res.statusCode = 200;
     res.send(data);
@@ -57,20 +57,18 @@ router.route('/srch').get(async (req, res, next) => {
 router.route('/randnotag').get(async (req, res, next) => {
   try {
     var lang = req.query.randnotag;
-    console.log(lang);
     let data = await connection.getRandomWords(lang);
     res.statusCode = 200;
     res.send(data);
   } catch (error) {
-    res.send(error);
     res.statusCode = 400;
+    res.send(error);
   }
 });
 
 router.route('/randwtag').get(async (req, res, next) => {
   try {
     var randwtag = req.query.randwtag.split('_');
-    console.log(randwtag[0], randwtag[1]);
     let data = await connection.getRandomWordsBasedOnTag(
       randwtag[0],
       randwtag[1]
@@ -78,8 +76,8 @@ router.route('/randwtag').get(async (req, res, next) => {
     res.statusCode = 200;
     res.send(data);
   } catch (error) {
-    res.send(error);
     res.statusCode = 400;
+    res.send(error);
   }
 });
 
@@ -90,7 +88,6 @@ router.route('/tag').get(async (req, res, next) => {
     if (data.length !== 0) {
       res.statusCode = 200;
       res.send(data);
-      next();
     } else {
       res.statusCode = 404;
       res.send({ message: `There is no word like ${tag}` });
@@ -119,8 +116,8 @@ router.route('/langtag').get(async (req, res, next) => {
     res.statusCode = 200;
     res.send(data);
   } catch (error) {
-    res.send(error);
     res.statusCode = 400;
+    res.send(error);
   }
 });
 
@@ -146,16 +143,16 @@ router
           res.statusCode = 404;
           res.send({ msg: `No entries with ID: ${id}!` });
         } else {
-          res.send(data);
           res.statusCode = 200;
+          res.send(data);
         }
       } else {
         res.statusCode = 400;
         res.send({ msg: 'id not a number' });
       }
     } catch (error) {
-      res.send(error);
       res.statusCode = 400;
+      res.send(error);
     }
   })
   .delete(async (req, res, next) => {
@@ -163,7 +160,6 @@ router
       let id = parseInt(req.query.id);
       if (!isNaN(id)) {
         let data = await connection.deleteById(id);
-        console.log(data);
         if (data.affectedRows === 0) {
           res.statusCode = 404;
           res.send({ msg: `No entries with ID: ${id}!` });
@@ -176,8 +172,8 @@ router
         res.send({ msg: 'id not a number' });
       }
     } catch (error) {
-      res.send(error);
       res.statusCode = 404;
+      res.send(error);
     }
   });
 
@@ -187,8 +183,8 @@ router.route('/mod').patch(async (req, res, next) => {
     res.statusCode = 200;
     res.send(req.body);
   } catch (error) {
-    res.send(error);
     res.statusCode = 404;
+    res.send(error);
   }
 });
 
@@ -198,8 +194,8 @@ router.route('/modall').patch(async (req, res, next) => {
     res.statusCode = 200;
     res.send(req.body);
   } catch (error) {
-    res.send(error);
     res.statusCode = 404;
+    res.send(error);
   }
 });
 
