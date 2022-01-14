@@ -95,7 +95,6 @@ function ModForm(props) {
   const handleSingleChange = (e) => {
     e.preventDefault();
     setSingleItem(e.target.value);
-    console.log(activeItem, e.target.value);
     if (activeItem === 'Tags') {
       setModItem({
         id: props.wordId,
@@ -150,12 +149,8 @@ function ModForm(props) {
     } else {
       df.modifyOneValue(modItem.id, modItem.column, modItem.value).then(
         (res) => {
-          let { id, column, value } = res;
-          console.log(id, column, value);
-          console.log(wordData[0][column]);
+          let { column, value } = res;
           wordData[0][column] = value;
-          console.log(wordData[0][column]);
-          console.log(wordData[0]);
           let newData = [wordData[0]];
           setWordData(newData);
         }
