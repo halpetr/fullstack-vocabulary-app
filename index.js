@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -39,7 +40,13 @@ const shutdown = () => {
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 
-// For testing connection
-app.get('/', async (req, res, next) => {
-  res.send({ message: 'ok' });
+app.get('/*', function (req, res) {
+  res.sendFile(
+    path.join(__dirname, 'frontend/build/index.html'),
+    function (err) {
+      if (err) {
+        res.status(500).send(err);
+      }
+    }
+  );
 });
