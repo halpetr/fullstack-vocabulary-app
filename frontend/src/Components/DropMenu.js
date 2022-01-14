@@ -9,6 +9,7 @@ function DropMenu(props) {
   const [langs, setLangs] = useState([]);
   const [unUsed, setUnused] = useState([]);
   const [isLangSelected, setIsLangSelected] = useState(false);
+  const [isLang2Selected, setIsLang2Selected] = useState(false);
   const [isTagSelected, setIsTagSelected] = useState(false);
   const [tags, setTags] = useState([]);
   const [unUsedTags, setUnUsedTags] = useState([]);
@@ -36,15 +37,15 @@ function DropMenu(props) {
 
   const handleClickLeft = (language) => {
     let ls = langs.filter((l) => language !== l);
-    if (ls.length !== langs.length) {
-      setIsLangSelected(true);
-    }
+
+    setIsLangSelected(true);
     setUnused(ls);
     setActiveLang1(language);
   };
 
   const handleClickRight = (language) => {
     let ls = unUsed.filter((l) => language !== l);
+    setIsLang2Selected(true);
     setUnused(ls);
     setActiveLang2(language);
   };
@@ -103,7 +104,11 @@ function DropMenu(props) {
         <Col>
           <h6>Select language you want to learn:</h6>
           <Dropdown onClick={() => getLanguages()}>
-            <Dropdown.Toggle id="toggle" variant="info">
+            <Dropdown.Toggle
+              id="toggle"
+              variant="info"
+              disabled={!isLangSelected}
+            >
               {activeLang2}
             </Dropdown.Toggle>
             <Dropdown.Menu variant="info">
@@ -167,7 +172,11 @@ function DropMenu(props) {
           </Dropdown>
         </Col>
         <Col id="drop-btn-col">
-          <Button onClick={() => handlePlayClick()} variant="success">
+          <Button
+            disabled={!isLang2Selected}
+            onClick={() => handlePlayClick()}
+            variant="success"
+          >
             Play!
           </Button>
         </Col>
