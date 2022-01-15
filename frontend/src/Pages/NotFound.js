@@ -9,6 +9,7 @@ function NotFound() {
         marginRight: 'auto',
         marginTop: '25px',
         textAlign: 'center',
+        color: 'whitesmoke',
       }}
     >
       <h2>404</h2>
