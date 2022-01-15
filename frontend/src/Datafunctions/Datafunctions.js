@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const Datafunctions = {
-  getSelectedLanguages: async (langs) => {
+  getWordsOfSelectedLangs: async (langs) => {
     try {
       let { data } = await axios.get(`/vocabulary/langs?langs=${langs}`);
       return data;
