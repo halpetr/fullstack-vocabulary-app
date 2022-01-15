@@ -1,39 +1,48 @@
+/**
+ * Express router providing vocabulary related routes
+ * @module routers/vocabulary
+ * @requires express
+ */
+
+/**
+ * express module
+ * @const
+ */
 const express = require('express');
 
+/**
+ * Express router for vocabulary related functions.
+ * @type {object}
+ * @var
+ * @namespace usersRouter
+ */
 var router = express.Router();
 
+/**
+ * Router given middleware
+ */
 router.use(express.json());
 
+/**
+ * Require module from the file that has the connection data and functions
+ * @param {string} path - Path to file
+ * @const
+ */
 const connection = require('../connection');
 
-router
-  .route('/')
-  .post(async (req, res, next) => {
-    try {
-      let body = req.body;
-      let p = await connection.post(body);
-      res.statusCode = 201;
-      res.send(p);
-    } catch (error) {
-      res.statusCode = 400;
-      res.send(error);
-    }
-  })
-  .get(async (req, res) => {
-    try {
-      let p = await connection.getAll();
-      res.statusCode = 200;
-      res.send(p);
-    } catch (error) {
-      res.statusCode = 400;
-      res.send(error);
-    }
-  });
-
-router.route('/langs').get(async (req, res, next) => {
+/**
+ * Route serving selected languages
+ * @name get/wordsOfLanguages
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.get('/langs', async (req, res, next) => {
   try {
     var langs = req.query.langs.split('_');
-    let data = await connection.getSelectedLanguages(langs[0], langs[1]);
+    let data = await connection.getWordsOfSelectedLangs(langs[0], langs[1]);
     res.statusCode = 200;
     res.send(data);
   } catch (error) {
@@ -42,7 +51,16 @@ router.route('/langs').get(async (req, res, next) => {
   }
 });
 
-router.route('/srch').get(async (req, res, next) => {
+/**
+ * Route serving searched items
+ * @name get/search
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.get('/srch', async (req, res, next) => {
   try {
     var x = req.query.srch.split('_');
     let data = await connection.getBySearch(x[0], x[1]);
@@ -54,7 +72,16 @@ router.route('/srch').get(async (req, res, next) => {
   }
 });
 
-router.route('/randnotag').get(async (req, res, next) => {
+/**
+ * Route serving 10 random words
+ * @name get/randomWords
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.get('/randnotag', async (req, res, next) => {
   try {
     var lang = req.query.randnotag;
     let data = await connection.getRandomWords(lang);
@@ -66,7 +93,16 @@ router.route('/randnotag').get(async (req, res, next) => {
   }
 });
 
-router.route('/randwtag').get(async (req, res, next) => {
+/**
+ * Route serving 10 random words that share the same tag and language
+ * @name get/randomWordsTagLang
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.get('/randwtag', async (req, res, next) => {
   try {
     var randwtag = req.query.randwtag.split('_');
     let data = await connection.getRandomWordsBasedOnTag(
@@ -81,7 +117,16 @@ router.route('/randwtag').get(async (req, res, next) => {
   }
 });
 
-router.route('/tag').get(async (req, res, next) => {
+/**
+ * Route serving 10 random words of any language
+ * @name get/randomWordsTag
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.get('/tag', async (req, res, next) => {
   try {
     var tag = req.query.tag;
     let data = await connection.getByTag(tag);
@@ -98,7 +143,16 @@ router.route('/tag').get(async (req, res, next) => {
   }
 });
 
-router.route('/tags').get(async (req, res, next) => {
+/**
+ * Route serving all distinct tags
+ * @name get/allTags
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.get('/tags', async (req, res, next) => {
   try {
     let data = await connection.getAllDifferentTags();
     res.statusCode = 200;
@@ -109,7 +163,16 @@ router.route('/tags').get(async (req, res, next) => {
   }
 });
 
-router.route('/langtag').get(async (req, res, next) => {
+/**
+ * Route serving all entries of 2 languages that have same tag
+ * @name get/allTagsofSameLang
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.get('/langtag', async (req, res, next) => {
   try {
     var langtag = req.query.langtag;
     let data = await connection.getByLangTag(langtag);
@@ -121,7 +184,16 @@ router.route('/langtag').get(async (req, res, next) => {
   }
 });
 
-router.route('/cols').get(async (req, res, next) => {
+/**
+ * Route serving all database column names
+ * @name get/allColumnNames
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.get('/cols', async (req, res, next) => {
   try {
     let data = await connection.getDatabaseColumns();
     res.statusCode = 200;
@@ -132,6 +204,16 @@ router.route('/cols').get(async (req, res, next) => {
   }
 });
 
+/**
+ * Route serving and deleting data by Id
+ * @name get/delete
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {function} route - Express router function
+ * @param {callback} middleware - Async express middleware
+ */
 router
   .route('/id')
   .get(async (req, res, next) => {
@@ -177,7 +259,37 @@ router
     }
   });
 
-router.route('/mod').patch(async (req, res, next) => {
+/**
+ * Route for posting data entry into database
+ * @name post
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.post('/', async (req, res, next) => {
+  try {
+    let body = req.body;
+    let p = await connection.post(body);
+    res.statusCode = 201;
+    res.send(p);
+  } catch (error) {
+    res.statusCode = 400;
+    res.send(error);
+  }
+});
+
+/**
+ * Route modifying one value of one entry
+ * @name patch/modOneValue
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.patch('/mod', async (req, res, next) => {
   try {
     await connection.modifyOneValue(req.body);
     res.statusCode = 200;
@@ -188,7 +300,16 @@ router.route('/mod').patch(async (req, res, next) => {
   }
 });
 
-router.route('/modall').patch(async (req, res, next) => {
+/**
+ * Route modifying all values of one entry
+ * @name patch/modAllValues
+ * @function
+ * @memberof module:routers/users~userRouter
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Async express middleware
+ */
+router.patch('/modall', async (req, res, next) => {
   try {
     await connection.modifyAllValues(req.body);
     res.statusCode = 200;
