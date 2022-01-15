@@ -14,8 +14,6 @@ function Admin(props) {
   const [user, setUser] = useState('');
   const [pw, setPw] = useState('');
 
-  console.log(isLoggedIn);
-
   const handleClick = (string) => {
     switch (string) {
       case 'Add':
@@ -44,7 +42,6 @@ function Admin(props) {
     if (user !== '' && pw !== '') {
       let userinfo = { user: user, pw: pw };
       df.getUser(userinfo).then((res) => {
-        console.log(res);
         if (res.data) {
           setIsLoggedIn(true);
         } else {
