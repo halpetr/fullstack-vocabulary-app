@@ -62,7 +62,7 @@ function DelForm(props) {
     <>
       <Form id="form">
         <Form.Label>
-          <h4>Delete by selecting a language and searching for a word:</h4>
+          <h5>Delete by selecting a language and searching for a word:</h5>
         </Form.Label>
         <Dropdown id="dropdown" onClick={() => props.getLanguages()}>
           <Dropdown.Toggle className="mb-2" variant="danger">
