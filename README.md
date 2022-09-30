@@ -7,4 +7,3 @@ user: admin
 password: etoricoxib
 #
 Heroku: https://fullstack-vocabulary-app.herokuapp.com/
-Screencast: https://www.youtube.com/watch?v=vFbX4uA5p3A
